@@ -38,7 +38,7 @@ Detailed notes live in the [docs](docs/) folder. The root README is intentionall
 | Microservice architecture                                          | [Microservice Architecture](docs/microservices.md)                   |
 | Microservice design patterns                                       | [Microservice Design Patterns](docs/microservice-design-patterns.md) |
 | How the code projects map to the learning goals                    | [Repository Learning Map](docs/repo-learning-map.md)                 |
-| Docs folder landing page                                           | [Architecture Learning Notes](docs/README.md)                        |
+| Docs folder landing page                                           | [Docs Index](docs/README.md)                                         |
 
 [Back to top](#top)
 
