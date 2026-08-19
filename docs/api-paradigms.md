@@ -7,6 +7,7 @@ This document compares request-response API styles: REST, RPC, and GraphQL.
 ## Table of Contents
 
 - [Overview](#overview)
+- [Design Considerations](#design-considerations)
 - [REST](#rest)
 - [RPC](#rpc)
 - [GraphQL](#graphql)
@@ -18,6 +19,24 @@ This document compares request-response API styles: REST, RPC, and GraphQL.
 An API paradigm defines the shape of the contract between a client and a server. Choosing the right paradigm affects coupling, payload size, client complexity, caching, discoverability, and future change.
 
 Request-response APIs commonly expose operations over HTTP or another network protocol. Clients send a request and receive a response.
+
+[Back to top](#top)
+
+## Design Considerations
+
+![API design considerations](Design_considerations.png)
+
+The diagram summarizes the trade-offs that influence API paradigm choices:
+
+- Coupling: REST usually creates looser resource-based coupling, RPC can be tighter because clients call specific operations, and GraphQL couples clients to a schema.
+- Chattiness: REST can require multiple round trips, RPC is often efficient for specific commands, and GraphQL can reduce calls by allowing clients to request nested data in one query.
+- Client complexity: REST clients are usually straightforward, RPC clients depend on generated stubs or method contracts, and GraphQL clients must understand query shape and schema behavior.
+- Cognitive complexity: REST is familiar and resource-oriented, RPC is simple for action-oriented workflows, and GraphQL adds query flexibility with more server-side complexity.
+- Caching: REST works naturally with HTTP caching, RPC usually needs custom caching, and GraphQL caching depends on client/server conventions.
+- Discoverability: GraphQL has strong schema introspection, REST often relies on documentation such as OpenAPI, and RPC relies on service contracts such as protobuf.
+- Versioning: REST often versions endpoints or media types, RPC evolves contracts carefully, and GraphQL can add fields without forcing a new endpoint version.
+
+Use these considerations before choosing a style. The best API paradigm is the one that fits the workflow, consumers, ownership model, and expected rate of change.
 
 [Back to top](#top)
 

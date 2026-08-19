@@ -22,12 +22,13 @@ The root README introduces API paradigms such as REST, RPC, GraphQL, WebHooks, W
 
 1. Start with [API Fundamentals](api-fundamentals.md).
 2. Compare request-response styles in [API Paradigms](api-paradigms.md).
-3. Review real-time communication in [Event Driven APIs](event-driven-apis.md).
+3. Review event-driven architecture in [Event Driven Architecture](event-driven-architecture.md).
 4. Review documentation practices in [API Documentation](api-documentation.md).
 5. Learn security basics in [API Security](api-security.md).
 6. Study internal structure with [Modular Monolith Architecture](modular-monolith.md).
 7. Study distributed design with [Microservice Architecture](microservices.md).
-8. Connect the notes back to code using [Repository Learning Map](repo-learning-map.md).
+8. Study recurring solutions in [Microservice Design Patterns](microservice-design-patterns.md).
+9. Connect the notes back to code using [Repository Learning Map](repo-learning-map.md).
 
 [Back to top](#top)
 
@@ -37,11 +38,12 @@ The root README introduces API paradigms such as REST, RPC, GraphQL, WebHooks, W
 | --- | --- |
 | [API Fundamentals](api-fundamentals.md) | What APIs are, why they exist, and design considerations |
 | [API Paradigms](api-paradigms.md) | REST, RPC, GraphQL, and when to use each |
-| [Event Driven APIs](event-driven-apis.md) | Polling, WebHooks, WebSockets, and HTTP streaming |
+| [Event Driven Architecture](event-driven-architecture.md) | Event-driven architecture, APIs, design patterns, delivery, and consistency |
 | [API Documentation](api-documentation.md) | Documentation formats, examples, contracts, and ownership |
 | [API Security](api-security.md) | Authentication, authorization, and API security practices |
 | [Modular Monolith Architecture](modular-monolith.md) | Module boundaries, data ownership, and deployment as one unit |
 | [Microservice Architecture](microservices.md) | Service boundaries, distributed data, integration, and operations |
+| [Microservice Design Patterns](microservice-design-patterns.md) | Decomposition, communication, data, reliability, observability, and deployment patterns |
 | [Repository Learning Map](repo-learning-map.md) | How `rest-spring` and `grpc` support the learning path |
 
 [Back to top](#top)
