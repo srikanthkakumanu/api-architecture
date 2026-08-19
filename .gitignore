@@ -5,7 +5,10 @@ graphql-dgs
 
 bin
 build
-gradle
+**/gradle/*
+!**/gradle/wrapper/
+!**/gradle/wrapper/gradle-wrapper.jar
+!**/gradle/wrapper/gradle-wrapper.properties
 
 .classpath
 .project
