@@ -14,6 +14,7 @@ This document catalogs common microservice design patterns for learning, compari
 - [Observability Patterns](#observability-patterns)
 - [Deployment Patterns](#deployment-patterns)
 - [Pattern Summary](#pattern-summary)
+- [Additional Pattern Placeholders](#additional-pattern-placeholders)
 - [Learning Exercises](#learning-exercises)
 
 ## Purpose
@@ -219,6 +220,81 @@ Use it when the same operational behavior is needed across many services. Be car
 | Event Sourcing | Need complete state history | Audit, replay, and event-first domain models |
 | Sidecar | Shared operational capabilities | Service mesh, logging, security, config helpers |
 | Strangler Fig | Incremental monolith migration | Gradual replacement of legacy functionality |
+
+[Back to top](#top)
+
+## Additional Pattern Placeholders
+
+These placeholders are reserved for future notes.
+
+### API Edge and Gateway Patterns
+
+- Backend for Frontend
+- API Composition
+- Gateway Routing
+- Gateway Aggregation
+- Gateway Offloading
+- Ambassador
+- Adapter
+- Aggregator
+
+### Reliability and Traffic Patterns
+
+- Retry
+- Timeout
+- Rate Limiting
+- Throttling
+- Load Balancing
+- Backpressure
+
+### Messaging and Event Patterns
+
+- Transactional Outbox
+- Inbox
+- Idempotent Consumer
+- Competing Consumers
+- Claim Check
+- Dead Letter Queue
+- Retry Queue
+- Priority Queue
+- Event-Carried State Transfer
+- Choreography
+- Orchestration
+
+### Data and Query Patterns
+
+- Materialized View
+- Sharding
+- Cache-Aside
+- Read Replica
+
+### Deployment and Migration Patterns
+
+- Canary Release
+- Blue-Green Deployment
+- Branch by Abstraction
+- Externalized Configuration
+- Config Server
+
+### Platform and Operations Patterns
+
+- Health Check API
+- Service Mesh
+- Sidecar
+- Leader Election
+
+### Security and Observability Patterns
+
+- Token Relay
+- Correlation ID
+- Distributed Tracing
+- Log Aggregation
+- Centralized Audit Logging
+
+### Boundary and Testing Patterns
+
+- Anti-Corruption Layer
+- Consumer-Driven Contract
 
 [Back to top](#top)
 
