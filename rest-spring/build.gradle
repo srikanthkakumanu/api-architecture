@@ -1,19 +1,22 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
-    id 'org.springframework.boot' version '2.5.4'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '4.1.0'
+    id 'io.spring.dependency-management' version '1.1.7'
     // id 'java'
     id 'application' // application plugin adds java plugin automatically
     // axion: Gradle release and version management plugin
-    id 'pl.allegro.tech.build.axion-release' version '1.13.3'
+    id 'pl.allegro.tech.build.axion-release' version '1.21.2'
 }
 
 group 'com.apidemo'
 version '0.0.1'
 description = "First Spring Boot Application"
 
-sourceCompatibility = '11'
-targetCompatibility = '11'
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(26)
+    }
+}
 
 configurations {
   compileOnly {
@@ -43,8 +46,6 @@ dependencies {
 
   // Java Bean validation
   implementation 'org.springframework.boot:spring-boot-starter-validation'
-  // Logging Facade
-  implementation ('org.slf4j:slf4j-api:1.7.32')
   // Lombok: Code Generation Annotation Library
   compileOnly 'org.projectlombok:lombok'
   // Gradle Annotation Processor using Lombok annotation processor
@@ -70,9 +71,9 @@ sourceSets {
 }
 
 
-// test {
-//   useJUnitPlatform()
-// }
+test {
+  useJUnitPlatform()
+}
 
 // Inform IDEs like IntelliJ IDEA, VSCode, Eclipse or NetBeans about the generated code.
 // sourceSets {

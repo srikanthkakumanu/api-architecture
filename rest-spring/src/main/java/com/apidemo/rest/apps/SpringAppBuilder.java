@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +20,11 @@ import java.util.List;
  * This class provides the bootstrap for the Spring Boot application that is 
  * executed in the main method. You need to pass the class that is executed.
  */ 
-@SpringBootApplication(exclude={ActiveMQAutoConfiguration.class, DataSourceAutoConfiguration.class}, excludeName="SecurityAutoConfiguration")
+@SpringBootApplication(excludeName={
+    "org.springframework.boot.activemq.autoconfigure.ActiveMQAutoConfiguration",
+    "org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration",
+    "org.springframework.boot.security.autoconfigure.servlet.SecurityAutoConfiguration"
+})
 //@EnableCaching
 public class SpringAppBuilder {
 

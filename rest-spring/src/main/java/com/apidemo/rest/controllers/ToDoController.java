@@ -22,7 +22,7 @@ import com.apidemo.rest.validation.ToDoValidationError;
 
 import java.net.URI;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import com.apidemo.rest.builders.ToDoBuilder;
 import com.apidemo.rest.model.ToDo;

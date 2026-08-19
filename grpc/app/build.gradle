@@ -10,7 +10,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
-    id 'com.google.protobuf' version '0.8.17'
+    id 'com.google.protobuf' version '0.10.0'
 }
 
 
@@ -20,26 +20,32 @@ repositories {
   }
   mavenCentral()
   mavenLocal()
-  // Use JCenter for resolving dependencies.
-  jcenter()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(26)
+    }
 }
 
 // Declare and update the version in our release process.
-def grpcVersion = '1.40.1' // CURRENT_GRPC_VERSION
-def protobufVersion = '3.17.3'
+def grpcVersion = '1.82.2' // CURRENT_GRPC_VERSION
+def protobufVersion = '4.31.1'
 def protocVersion = protobufVersion
 
 dependencies {
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13'
-    testImplementation 'io.grpc:grpc-testing:1.40.1' // or simply use ${grpcVersion} in place of 1.40.1
+    testImplementation "io.grpc:grpc-inprocess:${grpcVersion}"
+    testImplementation "io.grpc:grpc-testing:${grpcVersion}"
     testImplementation 'org.mockito:mockito-core:3.4.0' 
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:29.0-jre'
-    implementation 'io.grpc:grpc-netty-shaded:1.40.1' // or simply use ${grpcVersion} in place of 1.40.1
-    implementation 'io.grpc:grpc-protobuf:1.40.1' // or simply use ${grpcVersion} in place of 1.40.1
-    implementation 'io.grpc:grpc-stub:1.40.1' // or simply use ${grpcVersion} in place of 1.40.1
+    implementation "com.google.protobuf:protobuf-java:${protobufVersion}"
+    implementation "io.grpc:grpc-netty-shaded:${grpcVersion}"
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
     compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
 
 }
@@ -50,7 +56,7 @@ protobuf {
   }
   plugins {
     grpc {
-      artifact = 'io.grpc:protoc-gen-grpc-java:1.40.1' // or simply use ${grpcVersion} in place of 1.40.1
+      artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
     }
   }
   generateProtoTasks {
@@ -74,23 +80,31 @@ sourceSets {
 startScripts.enabled = false
 
 task helloServer(type: CreateStartScripts) {
-    mainClassName = 'com.apidemo.grpc.HelloServer'
+    mainClass = 'com.apidemo.grpc.HelloServer'
     applicationName = 'hello-server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
 task helloClient(type: CreateStartScripts) {
-    mainClassName = 'com.apidemo.grpc.HelloClient'
+    mainClass = 'com.apidemo.grpc.HelloClient'
     applicationName = 'hello-client'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
-applicationDistribution.into('bin') {
-  from(helloServer)
-  from(helloClient)
-  fileMode = 0755
+distributions {
+  main {
+    contents {
+      into('bin') {
+        from(helloServer)
+        from(helloClient)
+        filePermissions {
+          unix(0755)
+        }
+      }
+    }
+  }
 }
 
 // application {

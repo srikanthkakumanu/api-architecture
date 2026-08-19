@@ -2,9 +2,6 @@ package com.apidemo.rest.apps;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration;
-import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 /**
  * This program demos auto-configuration:
@@ -16,8 +13,12 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  * 
  * - Enable<Technology>: Enables specific technology
  */ 
-@SpringBootApplication(exclude={JmsAutoConfiguration.class, ActiveMQAutoConfiguration.class, DataSourceAutoConfiguration.class}, 
-excludeName="SecurityAutoConfiguration")
+@SpringBootApplication(excludeName={
+    "org.springframework.boot.jms.autoconfigure.JmsAutoConfiguration",
+    "org.springframework.boot.activemq.autoconfigure.ActiveMQAutoConfiguration",
+    "org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration",
+    "org.springframework.boot.security.autoconfigure.servlet.SecurityAutoConfiguration"
+})
 // @EnableWebSocket
 // @EnableScheduling
 // @EnableIntegration
