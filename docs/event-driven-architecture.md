@@ -11,6 +11,7 @@ This document explains event-driven architecture, event-driven APIs, and common 
 - [Event Driven APIs](#event-driven-apis)
 - [Event Types](#event-types)
 - [Design Patterns](#design-patterns)
+- [Event-Driven Microservice Patterns](#event-driven-microservice-patterns)
 - [Delivery and Consistency](#delivery-and-consistency)
 - [Comparison of API Styles](#comparison-of-api-styles)
 - [Architecture Learning Notes](#architecture-learning-notes)
@@ -80,6 +81,55 @@ Common event-driven design patterns include:
 - Choreography: Services react to events without a central orchestrator.
 - Orchestration: A coordinator tells participants what step to perform next.
 - Dead letter queue: Move repeatedly failing messages aside for investigation.
+
+[Back to top](#top)
+
+## Event-Driven Microservice Patterns
+
+Some microservice patterns are especially important in event-driven systems.
+
+### Saga
+
+A Saga coordinates a business workflow that crosses service boundaries. Each service performs a local transaction and publishes an event. The next service reacts to that event and continues the workflow.
+
+In choreography, services react to each other's events. In orchestration, a workflow coordinator decides which service should act next. Choreography can reduce central control, but it can become hard to understand. Orchestration is easier to follow, but the orchestrator becomes an important dependency.
+
+### Database per Service
+
+Database per Service supports event-driven architecture because each service owns its own state. When another service needs to know about a change, it consumes events instead of querying the owner's tables directly.
+
+This creates eventual consistency. Consumers may see changes slightly later than the producer, so workflows must tolerate delays, retries, and duplicate messages.
+
+### CQRS
+
+CQRS is often paired with events. Commands update the owning service's write model, and events update separate read models optimized for queries.
+
+For example, a `TodoCompleted` event could update a dashboard read model without making the dashboard service directly read the TODO service database.
+
+### Event Sourcing
+
+Event Sourcing stores the history of state changes as events. Instead of saving only the latest row, the system appends facts such as `TodoCreated`, `TodoRenamed`, and `TodoCompleted`.
+
+This makes audit and replay natural, but it requires careful event versioning and read model design. Event Sourcing is powerful, but it should be chosen for a real need, not just because a system uses events.
+
+### Circuit Breaker
+
+Circuit Breaker is not an event pattern by itself, but it matters when event-driven services still make synchronous calls. If a consumer calls another service while processing an event, a circuit breaker can prevent repeated dependency failures from blocking message processing.
+
+### Bulkhead
+
+Bulkhead is useful for event consumers because message processing can be isolated by topic, consumer group, dependency, or workload type. A slow or failing event handler should not exhaust the same thread pool, queue capacity, or database connections needed by unrelated handlers.
+
+For example, a failed notification workflow should not prevent payment events from being consumed. Bulkheads help preserve partial availability when one stream, dependency, or consumer path is unhealthy.
+
+### Service Discovery, API Gateway, Sidecar, and Strangler Fig
+
+These patterns support event-driven systems indirectly:
+
+- Service Discovery helps event producers, consumers, and supporting services locate each other in dynamic environments.
+- API Gateway can expose event-related HTTP APIs such as WebHook registration, event history, or streaming endpoints.
+- Sidecar can provide service mesh routing, mutual TLS, metrics, and tracing around event producers and consumers.
+- Strangler Fig can migrate a monolith toward event-driven services by routing selected workflows to new components and publishing integration events during the transition.
 
 [Back to top](#top)
 

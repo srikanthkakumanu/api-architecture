@@ -13,6 +13,7 @@ This document catalogs common microservice design patterns for learning, compari
 - [Reliability Patterns](#reliability-patterns)
 - [Observability Patterns](#observability-patterns)
 - [Deployment Patterns](#deployment-patterns)
+- [Pattern Summary](#pattern-summary)
 - [Learning Exercises](#learning-exercises)
 
 ## Purpose
@@ -33,6 +34,14 @@ Common decomposition patterns include:
 
 These patterns help decide where service boundaries should exist.
 
+### Strangler Fig
+
+The Strangler Fig pattern incrementally replaces an existing monolith by routing selected capabilities to new services while the old system continues to run. New functionality grows around the old application until enough behavior has moved away and the old code can be retired.
+
+Use it when a full rewrite is too risky. It works well with an API Gateway or reverse proxy because traffic can be routed feature by feature.
+
+Watch for duplicated business logic, inconsistent data ownership, and long transition periods where both old and new systems must stay compatible.
+
 [Back to top](#top)
 
 ## Communication Patterns
@@ -40,6 +49,7 @@ These patterns help decide where service boundaries should exist.
 Common communication patterns include:
 
 - API Gateway for a single client-facing entry point.
+- Service Discovery so services can locate each other dynamically.
 - Backend for Frontend for client-specific APIs.
 - Synchronous REST calls for resource-oriented interactions.
 - Synchronous gRPC calls for efficient internal RPC.
@@ -47,6 +57,26 @@ Common communication patterns include:
 - Publish-subscribe for broadcasting domain events.
 
 These patterns shape how services collaborate across the network.
+
+### API Gateway
+
+An API Gateway is a single entry point for client traffic. It routes requests to the right backend service and may handle cross-cutting concerns such as authentication, TLS termination, rate limiting, request logging, response shaping, and protocol translation.
+
+Use it when clients should not know every internal service address. It is especially helpful when mobile, browser, and third-party clients need a stable public API while internal services evolve.
+
+Avoid putting too much business logic in the gateway. If every workflow lives there, it becomes a new monolith at the edge.
+
+### Service Discovery
+
+Service Discovery lets services find each other without hard-coded hostnames and ports. A service registers its network location with a registry, and clients or infrastructure resolve the current location at runtime.
+
+Common approaches:
+
+- Client-side discovery: The client asks a registry where to call.
+- Server-side discovery: A load balancer or platform routes the request.
+- Platform discovery: Kubernetes Services, DNS, or a service mesh provide discovery.
+
+Use it when services scale dynamically, move between nodes, or run in containers where addresses are not stable.
 
 [Back to top](#top)
 
@@ -63,6 +93,41 @@ Common data patterns include:
 
 These patterns help preserve service autonomy while handling workflows that cross service boundaries.
 
+### Database per Service
+
+Database per Service means each service owns its data store and other services cannot directly read or write that database. Other services must use the owning service's API, consume its events, or build their own read models.
+
+This pattern protects service autonomy and prevents hidden coupling through shared tables. It also makes independent deployment safer because schema changes are owned by one service.
+
+The cost is distributed data complexity. Joins across services become API calls, replicated read models, or reporting pipelines. Multi-service workflows need patterns such as Saga, CQRS, and event-driven integration.
+
+### Saga
+
+A Saga manages a business transaction that spans multiple services without using one global database transaction. Each step commits locally in one service. If a later step fails, earlier steps are undone through compensating actions.
+
+Two common styles:
+
+- Choreography: Services publish and react to events without a central coordinator.
+- Orchestration: A coordinator tells each service which step to perform next.
+
+Use Saga for workflows such as order placement, payment, inventory reservation, shipment, or onboarding. Design compensating actions carefully because not every real-world action can be perfectly undone.
+
+### CQRS
+
+CQRS, or Command Query Responsibility Segregation, separates the model used to change state from the model used to read state.
+
+Commands validate intent and update the source of truth. Queries read from models optimized for lookup, reporting, or UI needs. In microservices, CQRS often appears with service-owned read models populated by events from other services.
+
+Use CQRS when read and write needs are very different, queries are expensive, or consumers need denormalized views. Avoid it for simple CRUD services where one model is enough.
+
+### Event Sourcing
+
+Event Sourcing stores state as a sequence of events instead of only storing the latest state. The current state is rebuilt by replaying events.
+
+For example, a TODO item might be represented by events such as `TodoCreated`, `TodoDescriptionChanged`, and `TodoCompleted`.
+
+Use Event Sourcing when auditability, temporal history, replay, or complex domain behavior is important. The trade-off is higher complexity around event schema evolution, replay, snapshots, and query models.
+
 [Back to top](#top)
 
 ## Reliability Patterns
@@ -77,6 +142,22 @@ Common reliability patterns include:
 - Idempotent consumer to safely process repeated messages.
 
 These patterns are essential because microservices fail partially and independently.
+
+### Circuit Breaker
+
+The Circuit Breaker pattern prevents a service from repeatedly calling an unhealthy dependency. After failures cross a threshold, the circuit opens and calls fail fast or return a fallback. After a delay, the circuit moves to half-open and allows a small number of trial calls.
+
+Use it for remote calls to services, databases, external APIs, and message brokers where repeated failure can exhaust threads, connection pools, or user patience.
+
+Circuit breakers work best with timeouts, retries, bulkheads, and clear fallback behavior. They should protect the caller without hiding real outages from observability.
+
+### Bulkhead
+
+The Bulkhead pattern isolates resources so one failing dependency, workflow, or tenant cannot consume everything the service needs to keep running. The name comes from ship compartments: damage in one compartment should not sink the whole ship.
+
+In software, bulkheads are often implemented with separate thread pools, connection pools, queues, rate limits, or worker groups. For example, calls to a slow payment service should not consume the same execution pool used by login, health checks, or core reads.
+
+Use it when a service handles multiple dependency calls or workloads with different reliability needs. Bulkheads pair well with circuit breakers because the circuit breaker stops repeated failing calls, while the bulkhead limits how much damage those calls can cause before the circuit opens.
 
 [Back to top](#top)
 
@@ -107,6 +188,37 @@ Common deployment patterns include:
 - Externalized configuration.
 
 These patterns help services change independently with less operational risk.
+
+### Sidecar
+
+The Sidecar pattern deploys a helper process beside a service. The sidecar provides supporting capabilities without embedding that code into the service itself.
+
+Common sidecar responsibilities:
+
+- Service mesh proxying.
+- TLS and mutual TLS.
+- Logging or metrics forwarding.
+- Configuration refresh.
+- Local adapters for external systems.
+
+Use it when the same operational behavior is needed across many services. Be careful that sidecars increase runtime complexity and resource usage.
+
+[Back to top](#top)
+
+## Pattern Summary
+
+| Pattern | Primary Problem | Typical Use |
+| --- | --- | --- |
+| API Gateway | Client entry point and request routing | Public API edge for many internal services |
+| Circuit Breaker | Repeated remote dependency failures | Protect callers from unhealthy dependencies |
+| Bulkhead | Failure spreading through shared resources | Isolate thread pools, queues, or connection pools |
+| Saga | Multi-service business transaction | Long-running workflows with local commits |
+| Service Discovery | Dynamic service locations | Containerized or elastic service environments |
+| Database per Service | Hidden data coupling | Independent service data ownership |
+| CQRS | Different read and write needs | Denormalized read models and complex queries |
+| Event Sourcing | Need complete state history | Audit, replay, and event-first domain models |
+| Sidecar | Shared operational capabilities | Service mesh, logging, security, config helpers |
+| Strangler Fig | Incremental monolith migration | Gradual replacement of legacy functionality |
 
 [Back to top](#top)
 

@@ -1,6 +1,6 @@
 <a id="top"></a>
 
-# Architecture Learning Lab
+# Architecture Learning Hub
 
 This repository is a learning and documentation workspace for API design, modular monolith architecture, and microservice architecture.
 
