@@ -1,5 +1,8 @@
 # Spring Framework
-RESTful API exploration of spring core, boot etc.
+RESTful API exploration of Spring Core, Spring Boot, JDBC, and REST API design.
+
+> [!NOTE]
+> All REST API design guidelines, URI naming conventions, HTTP status codes, and RFC 7807 error patterns are driven from the master [API Design Guide](../docs/api-design.md).
 
 <div style="text-align: justify">
 

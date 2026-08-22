@@ -2,7 +2,7 @@
 
 # API Documentation
 
-This document captures documentation practices for API learning and architecture notes.
+This document captures documentation practices for API learning and architecture notes. For actionable API design patterns and contract structures, see the [API Design Guide](api-design.md).
 
 ## Table of Contents
 

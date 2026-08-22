@@ -29,16 +29,17 @@ Detailed notes live in the [docs](docs/) folder. The root README is intentionall
 
 | Topic                                                              | Document                                                            |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------- |
-| API fundamentals, API value, and design considerations             | [API Fundamentals](docs/api-fundamentals.md)                         |
-| REST, RPC, GraphQL, and request-response APIs                      | [API Paradigms](docs/api-paradigms.md)                               |
-| Event-driven architecture, APIs, and design patterns               | [Event Driven Architecture](docs/event-driven-architecture.md)       |
-| API documentation practices                                        | [API Documentation](docs/api-documentation.md)                       |
-| API security, authentication, authorization, Basic Auth, and OAuth | [API Security](docs/api-security.md)                                 |
+| High-level system architecture, styles continuum, and repository mapping | [Architecture Overview](docs/architecture-overview.md)              |
+| Master API design guide, RESTful standards, gRPC, security, and paradigms | [API Design Guide](docs/api-design.md)                              |
 | Modular monolith architecture                                      | [Modular Monolith Architecture](docs/modular-monolith.md)            |
 | Microservice architecture                                          | [Microservice Architecture](docs/microservices.md)                   |
 | Microservice design patterns                                       | [Microservice Design Patterns](docs/microservice-design-patterns.md) |
+| Event-driven architecture and asynchronous messaging               | [Event Driven Architecture](docs/event-driven-architecture.md)       |
 | How the code projects map to the learning goals                    | [Repository Learning Map](docs/repo-learning-map.md)                 |
 | Docs folder landing page                                           | [Docs Index](docs/README.md)                                         |
+
+> [!NOTE]
+> All API-related topics—including API fundamentals, request-response paradigms (REST, RPC, GraphQL), API security, and API documentation practices—are consolidated and driven directly from the [API Design Guide](docs/api-design.md).
 
 [Back to top](#top)
 
@@ -53,15 +54,13 @@ Detailed notes live in the [docs](docs/) folder. The root README is intentionall
 
 ## Suggested Reading Path
 
-1. [API Fundamentals](docs/api-fundamentals.md)
-2. [API Paradigms](docs/api-paradigms.md)
-3. [Event Driven Architecture](docs/event-driven-architecture.md)
-4. [API Documentation](docs/api-documentation.md)
-5. [API Security](docs/api-security.md)
-6. [Modular Monolith Architecture](docs/modular-monolith.md)
-7. [Microservice Architecture](docs/microservices.md)
-8. [Microservice Design Patterns](docs/microservice-design-patterns.md)
-9. [Repository Learning Map](docs/repo-learning-map.md)
+1. [Architecture Overview](docs/architecture-overview.md)
+2. [API Design Guide](docs/api-design.md) *(Drives all API fundamentals, paradigms, contracts, documentation, and security)*
+3. [Modular Monolith Architecture](docs/modular-monolith.md)
+4. [Microservice Architecture](docs/microservices.md)
+5. [Microservice Design Patterns](docs/microservice-design-patterns.md)
+6. [Event Driven Architecture](docs/event-driven-architecture.md)
+7. [Repository Learning Map](docs/repo-learning-map.md)
 
 [Back to top](#top)
 

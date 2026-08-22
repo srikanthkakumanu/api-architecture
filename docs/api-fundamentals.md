@@ -2,7 +2,7 @@
 
 # API Fundamentals
 
-This document captures the foundational API concepts from the root README.
+This document captures the foundational API concepts from the root README. For actionable design rules, URI standards, status codes, and paradigm implementations, refer to the master [API Design Guide](api-design.md).
 
 ## Table of Contents
 

@@ -2,7 +2,7 @@
 
 # API Security
 
-This document captures API security concepts from the root README and connects them to architecture learning.
+This document captures API security concepts from the root README and connects them to architecture learning. For overall API design standards and architecture patterns, see the [API Design Guide](api-design.md).
 
 ## Table of Contents
 
