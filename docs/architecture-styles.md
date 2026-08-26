@@ -27,18 +27,18 @@ Each style has strengths, weaknesses and use cases.
 
 ### Layered Architecture
 
-**What it is**
+**Characteristics (What)**
 
-- Organizes an application into horizontal layers such as presentation, business logic, persistence, and database.
+- Layer Separation: Organizes an application into horizontal layers such as presentation, business logic, persistence, and database.
 
-**Why it is used**
+**Principles (Why)**
 
-- Separates responsibilities so the system is easier to understand, test, and maintain.
+- Clear Responsibility: Separates responsibilities so the system is easier to understand, test, and maintain.
 
-**Reasons to choose**
+**Benefits (Why choose)**
 
-- Provides a simple structure with clear boundaries.
-- Works well for CRUD-heavy applications.
+- Simple Structure: Provides a simple structure with clear boundaries.
+- CRUD Fit: Works well for CRUD-heavy applications.
 
 **Weakness**
 
@@ -53,19 +53,19 @@ Each style has strengths, weaknesses and use cases.
 
 ### Modular Architecture
 
-**What it is**
+**Characteristics (What)**
 
-- Organizes a single deployable application into clear business-focused modules.
-- Each module owns a cohesive part of the domain and exposes a controlled interface.
+- Business Modules: Organizes a single deployable application into clear business-focused modules.
+- Controlled Interface: Each module owns a cohesive part of the domain and exposes a controlled interface.
 
-**Why it is used**
+**Principles (Why)**
 
-- Keeps monolithic deployment simple while improving code ownership and maintainability.
+- Simple Deployment: Keeps monolithic deployment simple while improving code ownership and maintainability.
 
-**Reasons to choose**
+**Benefits (Why choose)**
 
-- Provides many modularity benefits without distributed system complexity.
-- Helps teams define boundaries before considering microservices.
+- Low Complexity: Provides many modularity benefits without distributed system complexity.
+- Team Boundaries: Helps teams define boundaries before considering microservices.
 
 **Weakness**
 
@@ -81,19 +81,19 @@ Each style has strengths, weaknesses and use cases.
 
 ### Pipeline Architecture
 
-**What it is**
+**Characteristics (What)**
 
-- Processes data through a sequence of independent steps.
-- Each step transforms, filters, or enriches the input before passing it forward.
+- Sequential Steps: Processes data through a sequence of independent steps.
+- Data Transformation: Each step transforms, filters, or enriches the input before passing it forward.
 
-**Why it is used**
+**Principles (Why)**
 
-- Useful when work can be broken into repeatable processing stages.
+- Repeatable Stages: Useful when work can be broken into repeatable processing stages.
 
-**Reasons to choose**
+**Benefits (Why choose)**
 
-- Easy to extend by adding or replacing processing steps.
-- Supports reusable steps for streaming or batch workflows.
+- Easy Extension: Easy to extend by adding or replacing processing steps.
+- Reusable Steps: Supports reusable steps for streaming or batch workflows.
 
 **Weakness**
 
@@ -108,18 +108,18 @@ Each style has strengths, weaknesses and use cases.
 
 ### Microkernel Architecture
 
-**What it is**
+**Characteristics (What)**
 
-- Builds a small core system with optional plugins that add features.
+- Small Core: Builds a small core system with optional plugins that add features.
 
-**Why it is used**
+**Principles (Why)**
 
-- Allows the system to be extended without changing the core logic.
+- Core Stability: Allows the system to be extended without changing the core logic.
 
-**Reasons to choose**
+**Benefits (Why choose)**
 
-- Provides high flexibility and plugin support.
-- Makes customization easier for different users or products.
+- High Flexibility: Provides high flexibility and plugin support.
+- Easy Customization: Makes customization easier for different users or products.
 
 **Weakness**
 
@@ -136,18 +136,18 @@ Each style has strengths, weaknesses and use cases.
 
 ### Service Oriented Architecture (SOA)
 
-**What it is**
+**Characteristics (What)**
 
-- Splits functionality into reusable services that communicate over a network.
+- Reusable Services: Splits functionality into reusable services that communicate over a network.
 
-**Why it is used**
+**Principles (Why)**
 
-- Enables reuse, integration, and independent ownership of business capabilities.
+- Shared Capability: Enables reuse, integration, and independent ownership of business capabilities.
 
-**Reasons to choose**
+**Benefits (Why choose)**
 
-- Good for large enterprises with shared business services.
-- Supports cross-system communication and integration.
+- Enterprise Reuse: Good for large enterprises with shared business services.
+- System Integration: Supports cross-system communication and integration.
 
 **Weakness**
 
@@ -162,19 +162,19 @@ Each style has strengths, weaknesses and use cases.
 
 ### Event-Driven Architecture (EDA)
 
-**What it is**
+**Characteristics (What)**
 
-- Designs systems around events that represent things that have already happened.
-- Producers publish events, and consumers react to them asynchronously.
+- Business Events: Designs systems around events that represent things that have already happened.
+- Async Reaction: Producers publish events, and consumers react to them asynchronously.
 
-**Why it is used**
+**Principles (Why)**
 
-- Reduces direct coupling between components and supports responsive, scalable workflows.
+- Loose Coupling: Reduces direct coupling between components and supports responsive, scalable workflows.
 
-**Reasons to choose**
+**Benefits (Why choose)**
 
-- Helps multiple services or modules react to business changes independently.
-- Works well for asynchronous processing, notifications, integrations, and audit trails.
+- Independent Reaction: Helps multiple services or modules react to business changes independently.
+- Async Workflows: Works well for asynchronous processing, notifications, integrations, and audit trails.
 
 **Weakness**
 
@@ -190,19 +190,19 @@ Each style has strengths, weaknesses and use cases.
 
 ### Space-Based Architecture
 
-**What it is**
+**Characteristics (What)**
 
-- Distributes application state and processing across multiple nodes.
-- Often uses in-memory data grids to share data quickly.
+- Distributed State: Distributes application state and processing across multiple nodes.
+- Memory Grid: Often uses in-memory data grids to share data quickly.
 
-**Why it is used**
+**Principles (Why)**
 
-- Reduces database bottlenecks and supports high scalability.
+- Bottleneck Reduction: Reduces database bottlenecks and supports high scalability.
 
-**Reasons to choose**
+**Benefits (Why choose)**
 
-- Supports high throughput and fault tolerance.
-- Scales elastically during sudden traffic spikes.
+- High Throughput: Supports high throughput and fault tolerance.
+- Elastic Scaling: Scales elastically during sudden traffic spikes.
 
 **Weakness**
 
@@ -217,18 +217,18 @@ Each style has strengths, weaknesses and use cases.
 
 ### Orchestration-Driven Architecture
 
-**What it is**
+**Characteristics (What)**
 
-- Uses a central orchestrator to coordinate services, workflows, or business processes.
+- Central Control: Uses a central orchestrator to coordinate services, workflows, or business processes.
 
-**Why it is used**
+**Principles (Why)**
 
-- Provides control and visibility over complex multi-step operations.
+- Process Visibility: Provides control and visibility over complex multi-step operations.
 
-**Reasons to choose**
+**Benefits (Why choose)**
 
-- Centralizes workflow management and monitoring.
-- Gives clear process control for business operations.
+- Workflow Management: Centralizes workflow management and monitoring.
+- Process Control: Gives clear process control for business operations.
 
 **Weakness**
 
@@ -243,19 +243,19 @@ Each style has strengths, weaknesses and use cases.
 
 ### Microservices Architecture
 
-**What it is**
+**Characteristics (What)**
 
-- Splits a system into independently deployable services.
-- Each service owns a business capability, exposes explicit contracts, and usually owns its own data.
+- Independent Services: Splits a system into independently deployable services.
+- Owned Data: Each service owns a business capability, exposes explicit contracts, and usually owns its own data.
 
-**Why it is used**
+**Principles (Why)**
 
-- Enables independent deployment, scaling, ownership, and failure isolation for different parts of a system.
+- Service Autonomy: Enables independent deployment, scaling, ownership, and failure isolation for different parts of a system.
 
-**Reasons to choose**
+**Benefits (Why choose)**
 
-- Helps teams work independently around clear service boundaries.
-- Supports different scaling, release, and technology needs per service.
+- Team Independence: Helps teams work independently around clear service boundaries.
+- Independent Scaling: Supports different scaling, release, and technology needs per service.
 
 **Weakness**
 
