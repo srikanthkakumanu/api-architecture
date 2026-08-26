@@ -1,12 +1,16 @@
 <a id="top"></a>
 
-# Event Driven Architecture
+# Event-Driven Architecture
 
 This document explains event-driven architecture, event-driven APIs, and common design patterns for modular monolith and microservice systems.
 
 ## Table of Contents
 
-- [Overview](#overview)
+- [What it is](#what-it-is)
+- [Why it is used](#why-it-is-used)
+- [Reasons to choose](#reasons-to-choose)
+- [Weakness](#weakness)
+- [When to choose](#when-to-choose)
 - [Core Concepts](#core-concepts)
 - [Event Driven APIs](#event-driven-apis)
 - [Event Types](#event-types)
@@ -17,11 +21,40 @@ This document explains event-driven architecture, event-driven APIs, and common 
 - [Architecture Learning Notes](#architecture-learning-notes)
 - [Learning Exercises](#learning-exercises)
 
-## Overview
+## What it is
 
-Event-driven architecture is a style where systems communicate by producing and consuming events. An event represents something that already happened, such as `TodoCreated`, `PaymentAuthorized`, `OrderShipped`, or `CustomerEmailChanged`.
+- Event-driven architecture is a style where systems communicate by producing and consuming events.
+- An event represents something that already happened, such as `TodoCreated`, `PaymentAuthorized`, `OrderShipped`, or `CustomerEmailChanged`.
 
-Instead of one component directly commanding every other component, producers publish events and consumers react to them. This can reduce coupling, improve extensibility, and support asynchronous workflows.
+Instead of one component directly commanding every other component, producers publish events and consumers react to them. This shifts the design from direct request chains to event reactions.
+
+[Back to top](#top)
+
+## Why it is used
+
+- It reduces direct coupling because producers do not need to know every consumer that reacts to a change.
+- It supports asynchronous workflows where work can continue without blocking the original request.
+
+[Back to top](#top)
+
+## Reasons to choose
+
+- Choose it when many modules, services, or external systems need to react to the same business fact.
+- Choose it when the system benefits from extensibility, delayed processing, audit trails, notifications, or independent consumers.
+
+[Back to top](#top)
+
+## Weakness
+
+- It can make workflows harder to trace because business processes are spread across producers, brokers, and consumers.
+- It requires careful design for retries, duplicate messages, ordering, schema changes, observability, and eventual consistency.
+
+[Back to top](#top)
+
+## When to choose
+
+- Choose it when business events should trigger follow-up work across modules, services, or external systems.
+- Choose it when the system can tolerate eventual consistency and needs loose coupling more than immediate synchronous control.
 
 [Back to top](#top)
 

@@ -20,7 +20,7 @@ This document introduces microservice architecture as a learning path for this r
 
 Microservice architecture splits a system into independently deployable services. Each service owns a business capability, exposes explicit contracts, and usually owns its own data.
 
-The key shift from a modular monolith is that boundaries become network boundaries.
+The key shift from a modular monolith is that **boundaries become network boundaries**.
 
 [Back to top](#top)
 
@@ -85,20 +85,20 @@ The Twelve-Factor App methodology is a set of practices for building application
 
 The twelve factors are:
 
-| Factor | Meaning for a Microservice |
-| --- | --- |
-| Codebase | One service should have one tracked codebase that can be deployed to multiple environments. |
-| Dependencies | Declare dependencies explicitly instead of relying on tools or libraries installed on a machine. |
-| Config | Store environment-specific configuration outside the code, usually in environment variables or platform configuration. |
-| Backing services | Treat databases, queues, caches, and external APIs as attached resources that can change by configuration. |
-| Build, release, run | Separate building an artifact, combining it with configuration, and running it. |
-| Processes | Run the service as one or more stateless processes. |
-| Port binding | Expose the service through a port instead of depending on an external application server. |
-| Concurrency | Scale by adding more processes or instances. |
-| Disposability | Start quickly and shut down gracefully. |
-| Dev/prod parity | Keep development, staging, and production as similar as practical. |
-| Logs | Write logs as event streams and let the platform collect and route them. |
-| Admin processes | Run one-off tasks, such as migrations, using the same code and configuration model. |
+| Factor              | Meaning for a Microservice                                                                                             |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Codebase            | One service should have one tracked codebase that can be deployed to multiple environments.                            |
+| Dependencies        | Declare dependencies explicitly instead of relying on tools or libraries installed on a machine.                       |
+| Config              | Store environment-specific configuration outside the code, usually in environment variables or platform configuration. |
+| Backing services    | Treat databases, queues, caches, and external APIs as attached resources that can change by configuration.             |
+| Build, release, run | Separate building an artifact, combining it with configuration, and running it.                                        |
+| Processes           | Run the service as one or more stateless processes.                                                                    |
+| Port binding        | Expose the service through a port instead of depending on an external application server.                              |
+| Concurrency         | Scale by adding more processes or instances.                                                                           |
+| Disposability       | Start quickly and shut down gracefully.                                                                                |
+| Dev/prod parity     | Keep development, staging, and production as similar as practical.                                                     |
+| Logs                | Write logs as event streams and let the platform collect and route them.                                               |
+| Admin processes     | Run one-off tasks, such as migrations, using the same code and configuration model.                                    |
 
 Its relationship to cloud-native architecture is direct: cloud-native systems assume automated deployment, elastic scaling, externalized configuration, managed backing services, logs and metrics collected by the platform, and fast replacement of unhealthy instances. Twelve-Factor gives practical application-level habits that support those cloud-native expectations.
 

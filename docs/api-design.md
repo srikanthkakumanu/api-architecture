@@ -50,8 +50,8 @@ flowchart TD
     end
 
     subgraph Codebases["Runnable Code Implementations"]
-        C1["Spring Boot REST API<br/>(rest-spring/)"]
-        C2["Java gRPC / Protobuf API<br/>(grpc/)"]
+        C1["Spring Boot REST API<br/>(apps/rest-spring/)"]
+        C2["Java gRPC / Protobuf API<br/>(apps/grpc/)"]
         C3["Repository Learning Map<br/>(docs/repo-learning-map.md)"]
     end
 
@@ -72,8 +72,8 @@ flowchart TD
 | **System Architecture** | [Architecture Overview](architecture-overview.md) | System-wide blueprints, North-South vs. East-West traffic, and architecture styles |
 | **Microservice Patterns** | [Microservice Design Patterns](microservice-design-patterns.md) | API Gateways, BFFs, Sagas, CQRS, and service communication patterns |
 | **Learning Roadmap** | [Repository Learning Map](repo-learning-map.md) | How the sample projects guide architectural learning |
-| **REST Implementation** | [rest-spring Project](../rest-spring/README.md) | Spring Boot 3 REST API implementation, DTO validation, and Flyway persistence |
-| **RPC Implementation** | [grpc Project](../grpc/README.md) | Schema-first Protobuf contract definitions, generated stubs, and RPC services |
+| **REST Implementation** | [rest-spring Project](../apps/rest-spring/README.md) | Spring Boot 3 REST API implementation, DTO validation, and Flyway persistence |
+| **RPC Implementation** | [grpc Project](../apps/grpc/README.md) | Schema-first Protobuf contract definitions, generated stubs, and RPC services |
 
 [Back to top](#top)
 
@@ -287,7 +287,7 @@ Adopt **RFC 7807 (Problem Details for HTTP APIs)** for consistent, structured er
 
 For high-throughput, low-latency East-West microservice communication, RPC with Protocol Buffers provides strong typing and efficient binary payloads.
 
-See the practical implementation in the [`grpc`](../grpc/) project.
+See the practical implementation in the [`grpc`](../apps/grpc/) project.
 
 ```mermaid
 sequenceDiagram
@@ -448,13 +448,13 @@ See comparisons in [API Paradigms](api-paradigms.md).
 
 This repository provides hands-on code demonstrating API design patterns:
 
-### 1. RESTful Spring Boot Service ([`rest-spring`](../rest-spring/))
+### 1. RESTful Spring Boot Service ([`rest-spring`](../apps/rest-spring/))
 - **Controllers & Routing**: Resource endpoints demonstrating standard CRUD operations and HTTP status codes.
 - **Validation**: Jakarta Bean Validation on request DTOs.
 - **Data Persistence**: Spring JDBC repository pattern with automated Flyway database schema migrations.
 - **Containerization**: Backing services managed via `docker-compose.yml`.
 
-### 2. gRPC RPC Service ([`grpc`](../grpc/))
+### 2. gRPC RPC Service ([`grpc`](../apps/grpc/))
 - **IDL Contract**: Schema-first definition in `hello.proto`.
 - **Code Generation**: Automated generation of client stubs and server bases via protobuf Gradle plugins.
 - **Testing**: In-process gRPC testing verifying RPC contracts without physical port binding.

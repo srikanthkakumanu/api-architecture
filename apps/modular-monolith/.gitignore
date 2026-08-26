@@ -1,26 +1,11 @@
-
-graphql-dgs
-.vscode
-.gradle
-.idea
-
-bin
-build
-**/gradle/*
-!**/gradle/wrapper/
-!**/gradle/wrapper/gradle-wrapper.jar
-!**/gradle/wrapper/gradle-wrapper.properties
-
-.classpath
-.project
-.settings
-
 # macOS
 .DS_Store
 .AppleDouble
 .LSOverride
 
 # Java / Gradle
+.gradle/
+build/
 out/
 target/
 *.class
@@ -57,7 +42,9 @@ playwright-report/
 !.env.sample
 
 # IDEs and editors
+.idea/
 *.iml
+.vscode/
 *.swp
 *.swo
 *~

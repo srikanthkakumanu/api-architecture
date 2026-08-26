@@ -2,7 +2,7 @@
 
 # Architecture Learning Hub
 
-This repository is a learning and documentation workspace for API design, modular monolith architecture, and microservice architecture.
+This repository is a learning and documentation workspace for software architecture styles, design patterns, and API design.
 
 Detailed notes live in the [docs](docs/) folder. The root README is intentionally a placeholder and navigation page.
 
@@ -16,11 +16,11 @@ Detailed notes live in the [docs](docs/) folder. The root README is intentionall
 
 ## Learning Goals
 
-- Understand API fundamentals and design trade-offs.
-- Compare REST, RPC, GraphQL, and event-driven API styles.
+- Understand how architecture styles shape structure, communication, scalability, and operational trade-offs.
+- Compare design patterns that solve common decomposition, communication, data, reliability, and integration problems.
+- Understand API fundamentals, API paradigms, and API design trade-offs as part of the larger architecture picture.
 - Use `rest-spring` to study REST APIs and Spring Boot application structure.
-- Use `grpc` to study RPC contracts and service-to-service communication.
-- Document modular monolith and microservice architecture patterns.
+- Use `grpc` to study RPC contracts and typed communication.
 - Grow the repository into a practical architecture learning lab.
 
 [Back to top](#top)
@@ -29,17 +29,14 @@ Detailed notes live in the [docs](docs/) folder. The root README is intentionall
 
 | Topic                                                              | Document                                                            |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------- |
-| High-level system architecture, styles continuum, and repository mapping | [Architecture Overview](docs/architecture-overview.md)              |
-| Master API design guide, RESTful standards, gRPC, security, and paradigms | [API Design Guide](docs/api-design.md)                              |
-| Modular monolith architecture                                      | [Modular Monolith Architecture](docs/modular-monolith.md)            |
-| Microservice architecture                                          | [Microservice Architecture](docs/microservices.md)                   |
-| Microservice design patterns                                       | [Microservice Design Patterns](docs/microservice-design-patterns.md) |
-| Event-driven architecture and asynchronous messaging               | [Event Driven Architecture](docs/event-driven-architecture.md)       |
+| High-level system architecture, style comparison, and repository mapping | [Architecture Overview](docs/architecture-overview.md)              |
+| Architecture style categories, trade-offs, strengths, and weaknesses | [Architecture Styles](docs/architecture-styles.md)                  |
+| API fundamentals, paradigms, contracts, security, and documentation | [API Design Guide](docs/api-design.md)                              |
 | How the code projects map to the learning goals                    | [Repository Learning Map](docs/repo-learning-map.md)                 |
 | Docs folder landing page                                           | [Docs Index](docs/README.md)                                         |
 
 > [!NOTE]
-> All API-related topics—including API fundamentals, request-response paradigms (REST, RPC, GraphQL), API security, and API documentation practices—are consolidated and driven directly from the [API Design Guide](docs/api-design.md).
+> API-related topics, including API fundamentals, request-response paradigms, API security, and API documentation practices, are grouped in the [API Design Guide](docs/api-design.md) as supporting material for the broader architecture learning path.
 
 [Back to top](#top)
 
@@ -47,20 +44,17 @@ Detailed notes live in the [docs](docs/) folder. The root README is intentionall
 
 | Project                    | Purpose                                                                                                  |
 | -------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [rest-spring](rest-spring/) | Spring Boot REST TODO API for learning REST, validation, JDBC, Flyway, and layered application structure |
-| [grpc](grpc/)               | Java gRPC client/server sample for learning protobuf contracts, generated code, and RPC communication    |
+| [rest-spring](apps/rest-spring/) | Spring Boot REST TODO API for learning REST, validation, JDBC, Flyway, and layered application structure |
+| [grpc](apps/grpc/)               | Java gRPC client/server sample for learning protobuf contracts, generated code, and RPC communication    |
 
 [Back to top](#top)
 
 ## Suggested Reading Path
 
 1. [Architecture Overview](docs/architecture-overview.md)
-2. [API Design Guide](docs/api-design.md) *(Drives all API fundamentals, paradigms, contracts, documentation, and security)*
-3. [Modular Monolith Architecture](docs/modular-monolith.md)
-4. [Microservice Architecture](docs/microservices.md)
-5. [Microservice Design Patterns](docs/microservice-design-patterns.md)
-6. [Event Driven Architecture](docs/event-driven-architecture.md)
-7. [Repository Learning Map](docs/repo-learning-map.md)
+2. [Architecture Styles](docs/architecture-styles.md)
+3. [API Design Guide](docs/api-design.md) *(API fundamentals, paradigms, contracts, documentation, and security in architectural context)*
+4. [Repository Learning Map](docs/repo-learning-map.md)
 
 [Back to top](#top)
 

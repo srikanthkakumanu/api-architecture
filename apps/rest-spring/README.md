@@ -51,7 +51,7 @@ Spring works with Plain Old Java Objects (POJO) by making it easy to exend. We n
 
 Spring Context that creates all the Spring beans using a configuration (XML or annotation or Java Config) that references all our classes which makes our application run.
 
-<img src="https://github.com/srikanthkakumanu/apis/blob/main/rest-spring/spring-context.png" width=500 height=300></img>
+<img src="https://github.com/srikanthkakumanu/apis/blob/main/apps/rest-spring/spring-context.png" width=500 height=300></img>
 
 ### 2.3 **Spring WebFlux**
 

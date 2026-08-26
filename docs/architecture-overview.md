@@ -2,17 +2,17 @@
 
 # Architecture Overview
 
-This document provides a comprehensive architectural overview of the concepts, paradigms, design patterns, and concrete code implementations in this repository. It serves as the central architectural blueprint connecting theoretical software architecture principles with practical implementations in [`rest-spring`](../rest-spring/) and [`grpc`](../grpc/).
+This document provides a comprehensive overview of software architecture styles, design patterns, API design, and concrete code implementations in this repository. It serves as the central blueprint connecting architectural concepts with practical examples in [`rest-spring`](../apps/rest-spring/) and [`grpc`](../apps/grpc/).
 
 ---
 
 ## Table of Contents
 
 - [Architectural Philosophy](#architectural-philosophy)
-- [Architectural Styles Continuum](#architectural-styles-continuum)
+- [Architecture Styles Landscape](#architecture-styles-landscape)
 - [Internal Component Architecture](#internal-component-architecture)
-- [API and Inter-Service Communication Taxonomy](#api-and-inter-service-communication-taxonomy)
-- [Data Architecture and Distributed Consistency](#data-architecture-and-distributed-consistency)
+- [Communication and API Taxonomy](#communication-and-api-taxonomy)
+- [Data Architecture and Consistency](#data-architecture-and-consistency)
 - [Cross-Cutting Architectural Concerns](#cross-cutting-architectural-concerns)
 - [Repository Implementation Mapping](#repository-implementation-mapping)
 - [Architectural Decision Framework](#architectural-decision-framework)
@@ -35,9 +35,10 @@ flowchart LR
     end
 
     subgraph Decisions["Architectural Decisions"]
-        S["Style (Monolith vs Microservices)"]
-        P["Protocols (REST, gRPC, EDA)"]
-        D1["Data Strategy (Shared vs Isolated)"]
+        S["Architecture Style"]
+        P["Design Patterns"]
+        CT["Communication and API Contracts"]
+        D1["Data Strategy"]
     end
 
     Forces --> Decisions
@@ -45,47 +46,50 @@ flowchart LR
 
 This repository emphasizes four core architectural tenets:
 
-1. **Modularity Before Distribution**: Establish clear domain boundaries and contracts within a single process before introducing network latency, serialization overhead, and distributed failure modes.
-2. **Explicit Contracts and Strong Typing**: APIs (whether synchronous REST/gRPC or asynchronous events) represent binding commitments between software boundaries. Schema-first design and contract testing preserve consumer trust.
-3. **Decoupled Data Ownership**: Data storage must be owned by the boundary that governs its business logic. Shared mutable databases across boundaries create fragile coupling.
-4. **Resilience and Observability as First-Class Citizens**: In distributed networks, latency and partial failures are inevitable. Systems must incorporate timeouts, circuit breakers, structured telemetry, and correlation IDs from day one.
+1. **Architecture Style Before Technology Choice**: Choose the structural style that fits the system's scale, change rate, team ownership, and operational constraints before choosing frameworks or protocols.
+2. **Patterns Solve Recurring Forces**: Use design patterns to address specific problems such as decomposition, integration, resilience, data consistency, and workflow coordination.
+3. **Explicit Boundaries and Contracts**: Module, service, API, and data boundaries should be intentional, documented, and protected by clear contracts.
+4. **Resilience and Observability as First-Class Citizens**: Systems should be designed with failure handling, tracing, logging, metrics, and operational visibility from the beginning.
 
 [Back to top](#top)
 
 ---
 
-## Architectural Styles Continuum
+## Architecture Styles Landscape
 
-Software architecture exists on a spectrum from unified single-process systems to highly distributed networks of autonomous micro-runtimes.
+Software architecture styles describe the high-level shape of a system: how responsibilities are divided, how parts communicate, how state is managed, and how the system scales or changes over time.
 
 ```mermaid
 flowchart TB
-    subgraph Monolith["Single Deployable Unit"]
-        M1["Layered Monolith<br/>(Horizontal technical slices)"]
-        M2["Modular Monolith<br/>(Vertical domain modules)"]
+    subgraph Monolithic["Monolithic Styles"]
+        L["Layered<br/>(technical layers)"]
+        M["Modular<br/>(business modules)"]
+        P["Pipeline<br/>(sequential processing stages)"]
+        K["Microkernel<br/>(core plus plugins)"]
     end
 
-    subgraph Distributed["Multi-Deployable Network"]
-        D1["Microservices<br/>(Independently deployed services)"]
-        D2["Event-Driven Architecture<br/>(Asynchronous decoupled emitters/consumers)"]
+    subgraph Distributed["Distributed Styles"]
+        SOA["Service Oriented<br/>(shared business services)"]
+        EDA["Event-Driven<br/>(publish and react to events)"]
+        SBA["Space-Based<br/>(distributed state and processing)"]
+        ORCH["Orchestration-Driven<br/>(central workflow coordination)"]
+        MS["Microservices<br/>(independent services)"]
     end
 
-    M1 -->|Refactor to domain boundaries| M2
-    M2 -->|Extract high-value bounded contexts| D1
-    D1 -->|Adopt event streams for loose coupling| D2
+    Monolithic -->|more independent deployment and scale| Distributed
 ```
 
 ### Comparative Trade-Off Matrix
 
-| Dimension | Layered Monolith | Modular Monolith | Microservices | Event-Driven Architecture |
-| :--- | :--- | :--- | :--- | :--- |
-| **Deployment Unit** | Single artifact (`.jar`, `.war`) | Single artifact (`.jar`) | Multiple autonomous containers | Heterogeneous independent nodes |
-| **Process Boundary** | In-process method calls | In-process module interfaces | Network calls (HTTP/gRPC) | Asynchronous message broker |
-| **Data Boundary** | Single shared database | Shared DB with logical schemas | Database-per-service | Event log / local projections |
-| **Transaction Model** | ACID (Local transactions) | ACID across modules | BASE / Sagas / Eventual | Eventual consistency |
-| **Operational Overhead** | Minimal (Single pipeline) | Low (Single deployment) | High (Service discovery, mesh) | High (Brokers, dead-letter queues) |
-| **Team Topologies** | Single team / low isolation | Multi-team on single codebase | Autonomous cross-functional teams | Highly autonomous producers/consumers |
-| **Failure Blast Radius** | High (Entire app crashes) | High (Process-wide failure) | Low (Isolated service failure) | Very Low (Decoupled by queues) |
+| Dimension | Layered | Modular | Pipeline | Microkernel | Distributed Styles |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Primary Organization** | Technical layers | Business modules | Processing stages | Core plus plugins | Services, events, spaces, or workflows |
+| **Best Fit** | Simple business apps | Evolving domains | Data transformation | Extensible products | Scale, integration, or independent ownership |
+| **Change Model** | Change by layer | Change by module | Change by stage | Change by plugin | Change by deployable capability |
+| **Operational Overhead** | Low | Low | Low to medium | Medium | Medium to high |
+| **Main Risk** | Layer coupling | Boundary erosion | Debugging long flows | Plugin complexity | Network, data, and observability complexity |
+
+See [Architecture Styles](architecture-styles.md) for concise guidance on what each style is, why it is used, when to choose it, and its weaknesses.
 
 [Back to top](#top)
 
@@ -125,7 +129,7 @@ flowchart TD
 
 - **Layered Architecture (N-Tier)**:
   - Modules are separated by technical function (Controller $\rightarrow$ Service $\rightarrow$ Repository).
-  - Simple to implement and standard in small-to-medium Spring Boot applications (as demonstrated in [`rest-spring`](../rest-spring/)).
+  - Simple to implement and standard in small-to-medium Spring Boot applications (as demonstrated in [`rest-spring`](../apps/rest-spring/)).
   - Risk: Domain logic tends to bleed into controllers or database queries, creating an anemic domain model.
 - **Hexagonal Architecture (Ports and Adapters)**:
   - Isolates core business domain logic from external technologies, frameworks, and protocols.
@@ -140,9 +144,9 @@ flowchart TD
 
 ---
 
-## API and Inter-Service Communication Taxonomy
+## Communication and API Taxonomy
 
-Communication patterns define how data and commands transition across network boundaries (North-South client ingress vs. East-West internal traffic).
+Communication patterns define how components exchange commands, queries, events, and data. API choices are part of architecture because they shape coupling, latency, ownership, and evolvability.
 
 ```mermaid
 flowchart TD
@@ -163,12 +167,12 @@ flowchart TD
     end
 ```
 
-### Communication Protocols Comparison
+### Communication and API Styles Comparison
 
 | Style | Protocol / Payload | Primary Use Case | Strengths | Trade-offs |
 | :--- | :--- | :--- | :--- | :--- |
 | **REST** | HTTP/1.1 or HTTP/2<br/>JSON / XML | Public APIs, CRUD, North-South ingress | Universal browser support, HTTP caching, human-readable | Chatty, over/under-fetching, larger payloads |
-| **gRPC** | HTTP/2<br/>Protocol Buffers | Internal East-West microservice communication | High throughput, binary serialization, bi-directional streaming | Requires Protobuf tooling, limited direct browser support |
+| **gRPC** | HTTP/2<br/>Protocol Buffers | Low-latency internal RPC communication | High throughput, binary serialization, bi-directional streaming | Requires Protobuf tooling, limited direct browser support |
 | **GraphQL** | HTTP<br/>JSON queries | Aggregated UI views, mobile BFFs | Single query for nested data, client-specified schema | Caching complexity, server-side N+1 query overhead |
 | **Event-Driven** | AMQP / Kafka / MQTT<br/>Binary / Avro / JSON | Asynchronous business workflows, decoupled integration | Temporal decoupling, high elasticity, fan-out broadcast | Eventual consistency, complex tracing and debugging |
 
@@ -176,9 +180,9 @@ flowchart TD
 
 ---
 
-## Data Architecture and Distributed Consistency
+## Data Architecture and Consistency
 
-When transitioning from monolithic to distributed systems, database design transitions from ACID transactions to distributed data patterns.
+Data architecture defines ownership, consistency, transaction boundaries, and how read models are shaped. Simple systems may rely on local ACID transactions, while distributed styles often require explicit consistency patterns.
 
 ```mermaid
 sequenceDiagram
@@ -214,15 +218,15 @@ sequenceDiagram
     deactivate OrderSvc
 ```
 
-### Core Distributed Data Patterns
+### Core Data and Consistency Patterns
 
 1. **Database-per-Service**:
-   - Each microservice possesses exclusive ownership of its data store. No external service may bypass the API to query database tables directly.
+   - A deployable boundary owns its data store. Other boundaries should use contracts, APIs, or events instead of bypassing the owner.
 2. **Transactional Outbox Pattern**:
    - Solves the dual-write problem (writing to a database and publishing to a message broker simultaneously).
    - Writes state changes and outbox event records within the same local database transaction. A change-data-capture (CDC) tailer or polling relay publishes events to the broker safely.
 3. **Saga Pattern**:
-   - Coordinates long-running business transactions spanning multiple microservices without two-phase commit (2PC).
+   - Coordinates long-running business transactions across multiple boundaries without two-phase commit (2PC).
    - **Choreography**: Each service produces and listens to events, making local decisions.
    - **Orchestration**: A centralized orchestrator service directs participating services via command messages.
 4. **CQRS (Command Query Responsibility Segregation)**:
@@ -312,8 +316,8 @@ graph LR
 
 | Project | Architectural Role | Key Technologies | Concepts Demonstrated |
 | :--- | :--- | :--- | :--- |
-| [`rest-spring`](../rest-spring/) | Resource-Oriented Web Service | Spring Boot 3, Spring JDBC, Flyway, PostgreSQL, Docker Compose, Gradle | • Layered architecture<br/>• RESTful resource design and validation (`jakarta.validation`)<br/>• Schema evolution via Flyway migrations<br/>• Containerized backing services (`docker-compose.yml`)<br/>• CI/CD pipeline definition (`Jenkinsfile`) |
-| [`grpc`](../grpc/) | High-Performance RPC Microservice | Java, gRPC, Protocol Buffers (proto3), Netty | • Schema-first contract definition (`.proto`)<br/>• Automated stub and model compilation<br/>• Synchronous unary RPC execution over HTTP/2<br/>• In-process gRPC testing and stub lifecycle management |
+| [`rest-spring`](../apps/rest-spring/) | Resource-Oriented Web Service | Spring Boot 3, Spring JDBC, Flyway, PostgreSQL, Docker Compose, Gradle | • Layered architecture<br/>• RESTful resource design and validation (`jakarta.validation`)<br/>• Schema evolution via Flyway migrations<br/>• Containerized backing services (`docker-compose.yml`)<br/>• CI/CD pipeline definition (`Jenkinsfile`) |
+| [`grpc`](../apps/grpc/) | High-Performance RPC Communication Sample | Java, gRPC, Protocol Buffers (proto3), Netty | • Schema-first contract definition (`.proto`)<br/>• Automated stub and model compilation<br/>• Synchronous unary RPC execution over HTTP/2<br/>• In-process gRPC testing and stub lifecycle management |
 
 [Back to top](#top)
 
@@ -321,30 +325,30 @@ graph LR
 
 ## Architectural Decision Framework
 
-When designing new components or evolving existing services, use the following decision tree to guide architectural selections:
+When designing new components or evolving existing systems, choose the architecture style first, then select patterns and APIs that support that style.
 
 ```mermaid
 flowchart TD
-    Start["New Feature / Service Need"] --> Q1{"Is high throughput / ultra-low latency internal RPC required?"}
-    Q1 -- Yes --> UseGRPC["Use gRPC (Protocol Buffers over HTTP/2)"]
-    Q1 -- No --> Q2{"Is asynchronous, temporal decoupling or broadcast needed?"}
-    Q2 -- Yes --> UseEDA["Use Event-Driven Architecture (Kafka / RabbitMQ)"]
-    Q2 -- No --> Q3{"Is the API consumed by diverse public/mobile clients?"}
-    Q3 -- Yes --> Q4{"Does the client require flexible, nested graph queries?"}
-    Q4 -- Yes --> UseGQL["Use GraphQL / BFF Layer"]
-    Q4 -- No --> UseREST["Use RESTful HTTP/JSON (OpenAPI Documented)"]
-    Q3 -- No --> UseREST
+    Start["New Capability or System Change"] --> Q1{"Is one deployable unit enough?"}
+    Q1 -- Yes --> Q2{"Is the work best organized by layers, modules, stages, or plugins?"}
+    Q2 --> Mono["Choose a monolithic style"]
+    Q1 -- No --> Q3{"Is the main force scale, integration, workflow control, or independent ownership?"}
+    Q3 --> Dist["Choose a distributed style"]
+    Mono --> Patterns["Select design patterns for boundaries, data, and resilience"]
+    Dist --> Patterns
+    Patterns --> API["Choose API and communication contracts: REST, gRPC, GraphQL, events, or messaging"]
 ```
 
 ### Architectural Review Checklist
 
 Before implementing a new architectural boundary:
 
-1. **Domain Boundary**: Does this component represent a distinct bounded context or an unnecessary technical split?
+1. **Architecture Style Fit**: Does the selected style match the system's scale, team shape, change rate, and operational maturity?
 2. **Data Governance**: Who is the single source of truth for the data? Is direct database sharing avoided?
-3. **Contract Stability**: Is there a documented schema (OpenAPI, Protobuf, AsyncAPI) with backward-compatibility guidelines?
-4. **Resilience Strategy**: Are fallback mechanisms, circuit breakers, and timeout configurations defined?
-5. **Observability Readiness**: Are structured logs, health checks (`/actuator/health`), and distributed trace headers configured?
+3. **Pattern Fit**: Which design patterns solve the actual forces in the system without adding unnecessary complexity?
+4. **Contract Stability**: Is there a documented schema or interface contract with backward-compatibility guidelines?
+5. **Resilience Strategy**: Are fallback mechanisms, circuit breakers, and timeout configurations defined?
+6. **Observability Readiness**: Are structured logs, health checks (`/actuator/health`), and trace or correlation headers configured?
 
 [Back to top](#top)
 
@@ -354,18 +358,16 @@ Before implementing a new architectural boundary:
 
 Navigate to deep-dive documentation across the repository:
 
-### Core Architecture Foundations
-- [API Design Guide](api-design.md): Master design standards, URI conventions, HTTP semantics, RFC 7807, gRPC, and cross-references.
+### Architecture Styles and Patterns
+- [Architecture Styles](architecture-styles.md): Overview of major architecture styles, trade-offs, strengths, weaknesses, and when to choose each style.
+- [Microservice Design Patterns](microservice-design-patterns.md): Catalog of decomposition, data, communication, reliability, observability, and deployment patterns.
+- [Repository Learning Map](repo-learning-map.md): Guided roadmap mapping learning milestones directly to codebase exercises.
+
+### API Design and Interface Topics
+- [API Design Guide](api-design.md): API standards, URI conventions, HTTP semantics, RFC 7807, gRPC, and cross-references.
 - [API Fundamentals](api-fundamentals.md): Principles of interface design, coupling, and API qualities.
 - [API Paradigms](api-paradigms.md): In-depth comparison of REST, RPC, and GraphQL.
 - [API Documentation](api-documentation.md): API contract documentation, OpenAPI specifications, and ownership.
 - [API Security](api-security.md): Authentication, authorization, OAuth2, and defense-in-depth patterns.
-
-### Architectural Styles and Patterns
-- [Modular Monolith Architecture](modular-monolith.md): In-process modularity, boundary enforcement, and data separation.
-- [Microservice Architecture](microservices.md): Distributed systems, Twelve-Factor app alignment, and operational foundations.
-- [Microservice Design Patterns](microservice-design-patterns.md): Catalog of decomposition, data, communication, and reliability patterns.
-- [Event-Driven Architecture](event-driven-architecture.md): Message brokers, event sourcing, stream processing, and delivery guarantees.
-- [Repository Learning Map](repo-learning-map.md): Guided roadmap mapping learning milestones directly to codebase exercises.
 
 [Back to top](#top)

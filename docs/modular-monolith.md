@@ -2,38 +2,55 @@
 
 # Modular Monolith Architecture
 
-This document introduces modular monolith architecture as a learning path for this repository.
+This document explains modular monolith architecture as a practical step between a simple monolith and a distributed system.
 
 ## Table of Contents
 
-- [Definition](#definition)
-- [Why Use a Modular Monolith](#why-use-a-modular-monolith)
+- [What it is](#what-it-is)
+- [Why it is used](#why-it-is-used)
+- [Reasons to choose](#reasons-to-choose)
+- [Weakness](#weakness)
+- [When to choose](#when-to-choose)
 - [Module Boundaries](#module-boundaries)
 - [Data Ownership](#data-ownership)
 - [Communication Between Modules](#communication-between-modules)
 - [Testing Strategy](#testing-strategy)
 - [Migration Path to Microservices](#migration-path-to-microservices)
-- [Learning Exercises](#learning-exercises)
 
-## Definition
+## What it is
 
-A modular monolith is one deployable application organized into clear internal modules. The system runs as a single process, but the code is structured around business capabilities rather than purely technical layers.
+- A modular monolith is one deployable application organized into clear internal modules.
+- The system runs as a single process, but the code is structured around business capabilities rather than only technical layers.
 
 The important idea is modularity first, distribution later.
 
 [Back to top](#top)
 
-## Why Use a Modular Monolith
+## Why it is used
 
-A modular monolith is useful when:
+- It keeps deployment and operations simple while still encouraging strong boundaries inside the codebase.
+- It gives many design benefits of microservices without immediately accepting distributed system costs.
 
-- The domain is still being learned.
-- The team wants simpler deployment and operations.
-- Strong transaction boundaries are useful.
-- Network complexity is not yet justified.
-- The system still needs clear ownership boundaries.
+[Back to top](#top)
 
-It gives many design benefits of microservices without immediately accepting distributed system costs.
+## Reasons to choose
+
+- Choose it when the team wants clear ownership, simpler testing, and easier local development.
+- Choose it when shared transactions are useful and network complexity is not yet justified.
+
+[Back to top](#top)
+
+## Weakness
+
+- Module boundaries can erode if the codebase allows unrestricted cross-module access.
+- The application is still deployed as one unit, so large builds, releases, or runtime failures can affect the whole system.
+
+[Back to top](#top)
+
+## When to choose
+
+- Choose it when the domain is still being learned and service boundaries are not yet stable.
+- Choose it when the system needs modular design, but the team is not ready for microservice operations.
 
 [Back to top](#top)
 
@@ -99,15 +116,5 @@ A modular monolith can prepare for microservices if module boundaries are real. 
 - Its failure modes can be isolated.
 
 Do not extract a module only because it is technically possible. Extract when the operational cost is justified.
-
-[Back to top](#top)
-
-## Learning Exercises
-
-- Refactor the `rest-spring` TODO app into modules such as `todo`, `api`, and `persistence`.
-- Create a package boundary rule that prevents controllers from directly using repositories.
-- Add an in-process event such as `TodoCompleted`.
-- Document which module owns the `todo` table.
-- Add module-level tests around the TODO service API.
 
 [Back to top](#top)
