@@ -47,6 +47,12 @@ This document provides a comprehensive guide to **Domain-Driven Design (DDD)** i
     - [The ACL Event Listener (`OrderPaidEventListener`)](#the-acl-event-listener-orderpaideventlistener)
   - [5. End-to-End Micro-Level Execution Trace](#5-end-to-end-micro-level-execution-trace)
 - [Golden Rules for Java Developers Applying DDD](#golden-rules-for-java-developers-applying-ddd)
+- [Step-By-Step Implementation Tutorial](#step-by-step-implementation-tutorial)
+  - [Step 1: Identify Bounded Contexts](#step-1-identify-bounded-contexts)
+  - [Step 2: Define Aggregates in Each Context](#step-2-define-aggregates-in-each-context)
+  - [Step 3: Define Relationships Between Contexts](#step-3-define-relationships-between-contexts)
+  - [Step 4: Infrastructure Glue](#step-4-infrastructure-glue)
+  - [Step 5: Putting It Together](#step-5-putting-it-together)
 
 [Back to top](#top)
 
@@ -356,7 +362,7 @@ flowchart TD
     Start["Do two Bounded Contexts need to communicate?"] -->|No| SW["Separate Ways"]
     Start -->|Yes| Control["Do you control the Upstream model?"]
   
-    Control -->|No (Legacy / 3rd-Party API)| ACL1["Use Anti-Corruption Layer (ACL)<br/>to isolate downstream domain"]
+    Control -->|"No (Legacy / 3rd-Party API)"| ACL1["Use Anti-Corruption Layer (ACL)<br/>to isolate downstream domain"]
     Control -->|Yes| Shared["Do many downstream teams need the same data?"]
   
     Shared -->|Yes| OHS["Implement Open Host Service (OHS)<br/>with Published Language (PL)"]
@@ -376,7 +382,7 @@ In our e-commerce architecture, **Ordering** is the Upstream (U) context providi
 
 ```mermaid
 flowchart LR
-    subgraph OrderingContext["Ordering Context [Upstream - U]"]
+    subgraph OrderingContext["Ordering Context (Upstream - U)"]
         OrderModel["Order Aggregate Root"]
         Publisher["Event Publisher"]
         OrderModel --> Publisher
@@ -386,7 +392,7 @@ flowchart LR
         Contract["OrderPaidIntegrationEvent<br/>(DTO Record)"]
     end
 
-    subgraph ShippingContext["Shipping Context [Downstream - D]"]
+    subgraph ShippingContext["Shipping Context (Downstream - D)"]
         ACL["Anti-Corruption Layer (ACL)<br/>• OrderPaidEventListener<br/>• OrderToShipmentTranslator"]
         ShipmentModel["Shipment Aggregate Root"]
         ACL -->|Instantiates & Commands| ShipmentModel
@@ -1106,5 +1112,195 @@ sequenceDiagram
 4. **Aggregates Enforce Invariants**: Never create public setters. Mutate state exclusively through domain methods named after real-world business actions (e.g., `shipment.assignCarrier(...)` instead of `shipment.setStatus(...)`).
 5. **Protect Downstream with an ACL**: When receiving data from an external context or third-party API, always route it through a dedicated Translator to prevent foreign model pollution.
 6. **Application Services Orchestrate, Domain Models Decide**: If your Application Service contains `if-else` branches checking domain rules, move that logic into the Aggregate Root or a Domain Service.
+
+[Back to top](#top)
+
+---
+
+## **Step-By-Step Implementation Tutorial**
+
+### **Step 1: Identify Bounded Contexts**
+
+In DDD, bounded contexts are **logical boundaries** where a domain model is consistent and meaningful.
+
+For our example:
+
+• **Order Context** → Manages orders, items, and statuses.
+
+• **Payment Context** → Manages payments, transactions, and refunds.
+
+They are separate because the language and rules differ:
+
+• In Orders, “status” means *Placed, Shipped, Delivered*.
+
+• In Payments, “status” means *Pending, Completed, Failed*.
+
+[Back to top](#top)
+
+---
+
+### **Step 2: Define Aggregates in Each Context**
+
+**Order Context**
+
+```java
+// Aggregate Root: Order
+public class Order {
+private final OrderId id;
+private final List<OrderItem> items;
+private OrderStatus status;
+
+    public Order(OrderId id) {
+        this.id = id;
+        this.items = new ArrayList<>();
+        this.status = OrderStatus.PLACED;
+    }
+
+    public void addItem(ProductId productId, int quantity) {
+        items.add(new OrderItem(productId, quantity));
+    }
+
+    public void markAsPaid() {
+        if (status != OrderStatus.PLACED) {
+            throw new IllegalStateException("Order cannot be paid in current state");
+        }
+        this.status = OrderStatus.PAID;
+    }
+
+    public OrderId getId() { return id; }
+    public OrderStatus getStatus() { return status; }
+}
+
+```
+
+```java
+public enum OrderStatus {
+    PLACED, PAID, SHIPPED, DELIVERED
+}
+
+```
+
+**Payment Context**
+
+```java
+// Aggregate Root: Payment
+public class Payment {
+    private final PaymentId id;
+    private final OrderId orderId;
+    private PaymentStatus status;
+
+    public Payment(PaymentId id, OrderId orderId) {
+        this.id = id;
+        this.orderId = orderId;
+        this.status = PaymentStatus.PENDING;
+    }
+
+    public void complete() {
+        if (status != PaymentStatus.PENDING) {
+            throw new IllegalStateException("Payment cannot be completed");
+        }
+        this.status = PaymentStatus.COMPLETED;
+    }
+
+    public void fail() {
+        this.status = PaymentStatus.FAILED;
+    }
+
+    public PaymentStatus getStatus() { return status; }
+    public OrderId getOrderId() { return orderId; }
+}
+```
+
+```java
+public enum PaymentStatus {
+    PENDING, COMPLETED, FAILED
+}
+```
+
+[Back to top](#top)
+
+---
+
+### **Step 3: Define Relationships Between Contexts**
+
+Bounded contexts don’t share entities directly. They communicate via **domain events** or **anti-corruption layers**.
+
+Example: Payment completes → Order must be marked as paid.
+
+**Domain Event in Payment Context**
+
+```java
+public class PaymentCompletedEvent {
+    private final OrderId orderId;
+
+    public PaymentCompletedEvent(OrderId orderId) {
+        this.orderId = orderId;
+    }
+
+    public OrderId getOrderId() { return orderId; }
+}
+```
+
+**Event Handler in Order Context**
+
+```java
+public class PaymentCompletedHandler {
+private final OrderRepository orderRepository;
+
+    public PaymentCompletedHandler(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
+    public void handle(PaymentCompletedEvent event) {
+        Order order = orderRepository.findById(event.getOrderId());
+        order.markAsPaid();
+        orderRepository.save(order);
+    }
+}
+```
+
+[Back to top](#top)
+
+---
+
+### **Step 4: Infrastructure Glue**
+
+Repositories abstract persistence. Each bounded context has its own repository.
+
+```java
+public interface OrderRepository {
+    Order findById(OrderId id);
+    void save(Order order);
+}
+
+public interface PaymentRepository {
+    Payment findById(PaymentId id);
+    void save(Payment payment);
+}
+```
+
+[Back to top](#top)
+
+---
+
+### **Step 5: Putting It Together**
+
+1. **Order is created** → status = PLACED.
+2. **Payment initiated** → status = PENDING.
+3. **Payment completes** → emits `PaymentCompletedEvent`.
+4. **Order context consumes event** → marks order as PAID.
+
+This way, each context has its own **ubiquitous language** and rules, but they collaborate via events.
+
+**Key Takeaways**
+
+• **Bounded Contexts** = separate models with their own rules.
+
+• **Aggregates** = consistency boundaries inside contexts.
+
+• **Events** = glue between contexts.
+
+• **Repositories** = persistence abstraction.
+
 
 [Back to top](#top)
