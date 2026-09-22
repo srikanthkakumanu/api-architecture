@@ -2,7 +2,7 @@
 
 # Architecture Overview
 
-This document provides a comprehensive overview of software architecture styles, design patterns, API design, and concrete code implementations in this repository. It serves as the central blueprint connecting architectural concepts with practical examples in [`rest-spring`](../apps/rest-spring/) and [`grpc`](../apps/grpc/).
+This document provides a comprehensive overview of software architecture styles, design patterns, API design, and concrete code implementations in this repository. It serves as the central blueprint connecting architectural concepts with practical examples in [`rest-spring`](../../apps/rest-spring/) and [`grpc`](../../apps/grpc/).
 
 ---
 
@@ -89,7 +89,7 @@ flowchart TB
 | **Operational Overhead** | Low | Low | Low to medium | Medium | Medium to high |
 | **Main Risk** | Layer coupling | Boundary erosion | Debugging long flows | Plugin complexity | Network, data, and observability complexity |
 
-See [Architecture Styles](architecture-styles.md) for concise guidance on what each style is, why it is used, when to choose it, and its weaknesses.
+See [Architecture Styles](styles.md) for concise guidance on what each style is, why it is used, when to choose it, and its weaknesses.
 
 [Back to top](#top)
 
@@ -129,7 +129,7 @@ flowchart TD
 
 - **Layered Architecture (N-Tier)**:
   - Modules are separated by technical function (Controller $\rightarrow$ Service $\rightarrow$ Repository).
-  - Simple to implement and standard in small-to-medium Spring Boot applications (as demonstrated in [`rest-spring`](../apps/rest-spring/)).
+  - Simple to implement and standard in small-to-medium Spring Boot applications (as demonstrated in [`rest-spring`](../../apps/rest-spring/)).
   - Risk: Domain logic tends to bleed into controllers or database queries, creating an anemic domain model.
 - **Hexagonal Architecture (Ports and Adapters)**:
   - Isolates core business domain logic from external technologies, frameworks, and protocols.
@@ -316,8 +316,8 @@ graph LR
 
 | Project | Architectural Role | Key Technologies | Concepts Demonstrated |
 | :--- | :--- | :--- | :--- |
-| [`rest-spring`](../apps/rest-spring/) | Resource-Oriented Web Service | Spring Boot 3, Spring JDBC, Flyway, PostgreSQL, Docker Compose, Gradle | • Layered architecture<br/>• RESTful resource design and validation (`jakarta.validation`)<br/>• Schema evolution via Flyway migrations<br/>• Containerized backing services (`docker-compose.yml`)<br/>• CI/CD pipeline definition (`Jenkinsfile`) |
-| [`grpc`](../apps/grpc/) | High-Performance RPC Communication Sample | Java, gRPC, Protocol Buffers (proto3), Netty | • Schema-first contract definition (`.proto`)<br/>• Automated stub and model compilation<br/>• Synchronous unary RPC execution over HTTP/2<br/>• In-process gRPC testing and stub lifecycle management |
+| [`rest-spring`](../../apps/rest-spring/) | Resource-Oriented Web Service | Spring Boot 3, Spring JDBC, Flyway, PostgreSQL, Docker Compose, Gradle | • Layered architecture<br/>• RESTful resource design and validation (`jakarta.validation`)<br/>• Schema evolution via Flyway migrations<br/>• Containerized backing services (`docker-compose.yml`)<br/>• CI/CD pipeline definition (`Jenkinsfile`) |
+| [`grpc`](../../apps/grpc/) | High-Performance RPC Communication Sample | Java, gRPC, Protocol Buffers (proto3), Netty | • Schema-first contract definition (`.proto`)<br/>• Automated stub and model compilation<br/>• Synchronous unary RPC execution over HTTP/2<br/>• In-process gRPC testing and stub lifecycle management |
 
 [Back to top](#top)
 
@@ -359,15 +359,15 @@ Before implementing a new architectural boundary:
 Navigate to deep-dive documentation across the repository:
 
 ### Architecture Styles and Patterns
-- [Architecture Styles](architecture-styles.md): Overview of major architecture styles, trade-offs, strengths, weaknesses, and when to choose each style.
-- [Microservice Design Patterns](microservice-design-patterns.md): Catalog of decomposition, data, communication, reliability, observability, and deployment patterns.
-- [Repository Learning Map](repo-learning-map.md): Guided roadmap mapping learning milestones directly to codebase exercises.
+- [Architecture Styles](styles.md): Overview of major architecture styles, trade-offs, strengths, weaknesses, and when to choose each style.
+- [Microservice Design Patterns](../micro-services/patterns/microservice-design-patterns.md): Catalog of decomposition, data, communication, reliability, observability, and deployment patterns.
+- [Repository Learning Map](../learning/repository-learning-map.md): Guided roadmap mapping learning milestones directly to codebase exercises.
 
 ### API Design and Interface Topics
-- [API Design Guide](api-design.md): API standards, URI conventions, HTTP semantics, RFC 7807, gRPC, and cross-references.
-- [API Fundamentals](api-fundamentals.md): Principles of interface design, coupling, and API qualities.
-- [API Paradigms](api-paradigms.md): In-depth comparison of REST, RPC, and GraphQL.
-- [API Documentation](api-documentation.md): API contract documentation, OpenAPI specifications, and ownership.
-- [API Security](api-security.md): Authentication, authorization, OAuth2, and defense-in-depth patterns.
+- [API Design Guide](../api/design.md): API standards, URI conventions, HTTP semantics, RFC 7807, gRPC, and cross-references.
+- [API Fundamentals](../api/fundamentals.md): Principles of interface design, coupling, and API qualities.
+- [API Paradigms](../api/paradigms.md): In-depth comparison of REST, RPC, and GraphQL.
+- [API Documentation](../api/documentation.md): API contract documentation, OpenAPI specifications, and ownership.
+- [API Security](../api/security.md): Authentication, authorization, OAuth2, and defense-in-depth patterns.
 
 [Back to top](#top)

@@ -5,7 +5,7 @@
 This project is a Java gRPC sample demonstrating Protocol Buffer contract definitions, automated code generation, and client/server RPC communication.
 
 > [!NOTE]
-> All RPC design guidelines, Protocol Buffer standards, and API comparisons are driven from the master [API Design Guide](../../docs/api-design.md).
+> All RPC design guidelines, Protocol Buffer standards, and API comparisons are driven from the master [API Design Guide](../../docs/api/design.md).
 
 ---
 
@@ -50,6 +50,6 @@ This project is a Java gRPC sample demonstrating Protocol Buffer contract defini
 
 ## Architecture & API Design Reference
 
-For in-depth contract design principles, Protobuf schema evolution rules, and service-to-service RPC patterns, see the master [API Design Guide](../../docs/api-design.md).
+For in-depth contract design principles, Protobuf schema evolution rules, and service-to-service RPC patterns, see the master [API Design Guide](../../docs/api/design.md).
 
 [Back to top](#top)

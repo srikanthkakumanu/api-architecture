@@ -2,7 +2,7 @@
 
 # API Paradigms
 
-This document compares request-response API styles: REST, RPC, and GraphQL. For full design patterns, error standards, and implementation guides, see the [API Design Guide](api-design.md).
+This document compares request-response API styles: REST, RPC, and GraphQL. For full design patterns, error standards, and implementation guides, see the [API Design Guide](design.md).
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ Request-response APIs commonly expose operations over HTTP or another network pr
 
 ## Design Considerations
 
-![API design considerations](Design_considerations.png)
+![API design considerations](design-considerations.png)
 
 The diagram summarizes the trade-offs that influence API paradigm choices:
 

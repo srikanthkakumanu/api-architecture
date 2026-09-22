@@ -2,6 +2,8 @@
 
 A small clinic prototype built as a modular monolith. It uses a Spring Boot 4 backend for the domain/API and a Next.js TypeScript frontend for the reception desk experience.
 
+See [Modular Monolith Architecture](../../docs/architecture/modular-monolith.md) for the architectural concepts behind this implementation.
+
 ## Stack
 
 - Java 26

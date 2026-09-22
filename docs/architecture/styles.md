@@ -265,6 +265,6 @@ Each style has strengths, weaknesses and use cases.
 **When to choose**
 
 - Choose it when service boundaries are stable and teams need independent deployment or scaling.
-- See [Microservice Architecture](microservices.md) for more detail.
+- See [Microservice Architecture](../micro-services/microservices.md) for more detail.
 
 [Back to top](#top)

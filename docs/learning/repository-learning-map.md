@@ -8,6 +8,7 @@ This document connects the repository projects to the architecture learning goal
 
 - [Repository Purpose](#repository-purpose)
 - [Current Projects](#current-projects)
+- [How to Use modular-monolith](#how-to-use-modular-monolith)
 - [How to Use rest-spring](#how-to-use-rest-spring)
 - [How to Use grpc](#how-to-use-grpc)
 - [Suggested Documentation Growth](#suggested-documentation-growth)
@@ -15,9 +16,9 @@ This document connects the repository projects to the architecture learning goal
 
 ## Repository Purpose
 
-This repository can become a practical learning lab for API design, modular monolith architecture, and microservice architecture.
+This repository is a practical learning lab for API design, modular monolith architecture, and microservice architecture.
 
-The existing root README is a broad conceptual overview of API paradigms. The project folders provide runnable examples that can become architecture exercises.
+The topic guides establish the concepts, and the project folders provide runnable architecture exercises.
 
 [Back to top](#top)
 
@@ -27,6 +28,19 @@ The existing root README is a broad conceptual overview of API paradigms. The pr
 | --- | --- | --- |
 | `rest-spring` | Spring Boot REST TODO API | REST, layered architecture, validation, JDBC, Flyway, configuration |
 | `grpc` | Java gRPC hello client/server | RPC, protobuf contracts, generated code, client/server tests |
+| `modular-monolith` | Spring Modulith clinic application | Business modules, controlled interfaces, architecture tests, full-stack integration |
+
+[Back to top](#top)
+
+## How to Use modular-monolith
+
+Use `modular-monolith` to study:
+
+- Business-capability modules in a single deployment.
+- Public module APIs and private implementation packages.
+- Spring Modulith boundary verification.
+- Cross-module collaboration without direct access to internal packages.
+- A Next.js client consuming a modular Spring Boot backend.
 
 [Back to top](#top)
 
@@ -74,16 +88,15 @@ Possible microservice direction:
 
 ## Suggested Documentation Growth
 
-Add future docs when the repo grows:
+Add future docs under the topic that owns them:
 
-- `docs/rest-api-design.md`
-- `docs/grpc-contracts.md`
-- `docs/domain-driven-design.md`
-- `docs/module-boundaries.md`
-- `docs/service-discovery.md`
-- `docs/observability.md`
-- `docs/testing-strategy.md`
-- `docs/deployment.md`
+- `docs/api/rest-design.md`
+- `docs/api/grpc-contracts.md`
+- `docs/architecture/module-boundaries.md`
+- `docs/micro-services/service-discovery.md`
+- `docs/micro-services/observability.md`
+- `docs/micro-services/testing-strategy.md`
+- `docs/micro-services/deployment.md`
 
 Each new document should follow the same table of contents and back-to-top pattern.
 
@@ -91,13 +104,11 @@ Each new document should follow the same table of contents and back-to-top patte
 
 ## Review Notes From README
 
-The root README has strong breadth and is useful as a starting primer. A few improvements would make it easier to maintain:
+The root README is intentionally a navigation page. Keep it easy to maintain by following these rules:
 
-- Convert the plain table of contents into links.
-- Move detailed sections into the `docs/` folder to reduce README length.
-- Fix typos such as `Jarkarta`, `devependency`, `persistance`, and `standarized`.
-- Replace raw HTML where Markdown is enough.
-- Remove or explain the trailing notes `NSQ` and `Kicklock`.
-- Add a short section that explains how `rest-spring` and `grpc` map to the architecture learning goals.
+- Keep detailed material in the appropriate topic folder under `docs/`.
+- Link new documents from both their topic index and the main docs index.
+- Keep project-specific setup and execution guidance beside the project code.
+- Prefer relative links so documentation works in local checkouts and repository browsers.
 
 [Back to top](#top)

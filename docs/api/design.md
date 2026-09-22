@@ -34,25 +34,25 @@ This master guide connects directly to the specialized API documentation across 
 
 ```mermaid
 flowchart TD
-    Master["API Design Guide<br/>(docs/api-design.md)"]
+    Master["API Design Guide<br/>(docs/api/design.md)"]
 
     subgraph Foundations["Foundations & Standards"]
-        F1["API Fundamentals<br/>(docs/api-fundamentals.md)"]
-        F2["API Documentation<br/>(docs/api-documentation.md)"]
-        F3["API Security<br/>(docs/api-security.md)"]
+        F1["API Fundamentals<br/>(docs/api/fundamentals.md)"]
+        F2["API Documentation<br/>(docs/api/documentation.md)"]
+        F3["API Security<br/>(docs/api/security.md)"]
     end
 
     subgraph Paradigms["Paradigms & Architecture"]
-        P1["API Paradigms<br/>(docs/api-paradigms.md)"]
-        P2["Event-Driven Architecture<br/>(docs/event-driven-architecture.md)"]
-        P3["Architecture Overview<br/>(docs/architecture-overview.md)"]
-        P4["Microservice Patterns<br/>(docs/microservice-design-patterns.md)"]
+        P1["API Paradigms<br/>(docs/api/paradigms.md)"]
+        P2["Event-Driven Architecture<br/>(docs/architecture/event-driven-architecture.md)"]
+        P3["Architecture Overview<br/>(docs/architecture/overview.md)"]
+        P4["Microservice Patterns<br/>(docs/micro-services/patterns/microservice-design-patterns.md)"]
     end
 
     subgraph Codebases["Runnable Code Implementations"]
         C1["Spring Boot REST API<br/>(apps/rest-spring/)"]
         C2["Java gRPC / Protobuf API<br/>(apps/grpc/)"]
-        C3["Repository Learning Map<br/>(docs/repo-learning-map.md)"]
+        C3["Repository Learning Map<br/>(docs/learning/repository-learning-map.md)"]
     end
 
     Master --> Foundations
@@ -64,16 +64,16 @@ flowchart TD
 
 | Topic | Document | Focus & Cross-Reference |
 | :--- | :--- | :--- |
-| **API Fundamentals** | [API Fundamentals](api-fundamentals.md) | Definitions, purpose, coupling, chattiness, and design trade-offs |
-| **API Paradigms** | [API Paradigms](api-paradigms.md) | Comparing REST, RPC, GraphQL, and request-response patterns |
-| **Event-Driven APIs** | [Event-Driven Architecture](event-driven-architecture.md) | Asynchronous messaging, event contracts, delivery semantics, and Outbox pattern |
-| **API Documentation** | [API Documentation](api-documentation.md) | OpenAPI specs, Protobuf IDLs, developer experience, and contract ownership |
-| **API Security** | [API Security](api-security.md) | Authentication (OAuth2/OIDC, Basic, mTLS), RBAC/ABAC, and input sanitization |
-| **System Architecture** | [Architecture Overview](architecture-overview.md) | System-wide blueprints, North-South vs. East-West traffic, and architecture styles |
-| **Microservice Patterns** | [Microservice Design Patterns](microservice-design-patterns.md) | API Gateways, BFFs, Sagas, CQRS, and service communication patterns |
-| **Learning Roadmap** | [Repository Learning Map](repo-learning-map.md) | How the sample projects guide architectural learning |
-| **REST Implementation** | [rest-spring Project](../apps/rest-spring/README.md) | Spring Boot 3 REST API implementation, DTO validation, and Flyway persistence |
-| **RPC Implementation** | [grpc Project](../apps/grpc/README.md) | Schema-first Protobuf contract definitions, generated stubs, and RPC services |
+| **API Fundamentals** | [API Fundamentals](fundamentals.md) | Definitions, purpose, coupling, chattiness, and design trade-offs |
+| **API Paradigms** | [API Paradigms](paradigms.md) | Comparing REST, RPC, GraphQL, and request-response patterns |
+| **Event-Driven APIs** | [Event-Driven Architecture](../architecture/event-driven-architecture.md) | Asynchronous messaging, event contracts, delivery semantics, and Outbox pattern |
+| **API Documentation** | [API Documentation](documentation.md) | OpenAPI specs, Protobuf IDLs, developer experience, and contract ownership |
+| **API Security** | [API Security](security.md) | Authentication (OAuth2/OIDC, Basic, mTLS), RBAC/ABAC, and input sanitization |
+| **System Architecture** | [Architecture Overview](../architecture/overview.md) | System-wide blueprints, North-South vs. East-West traffic, and architecture styles |
+| **Microservice Patterns** | [Microservice Design Patterns](../micro-services/patterns/microservice-design-patterns.md) | API Gateways, BFFs, Sagas, CQRS, and service communication patterns |
+| **Learning Roadmap** | [Repository Learning Map](../learning/repository-learning-map.md) | How the sample projects guide architectural learning |
+| **REST Implementation** | [rest-spring Project](../../apps/rest-spring/README.md) | Spring Boot 3 REST API implementation, DTO validation, and Flyway persistence |
+| **RPC Implementation** | [grpc Project](../../apps/grpc/README.md) | Schema-first Protobuf contract definitions, generated stubs, and RPC services |
 
 [Back to top](#top)
 
@@ -83,7 +83,7 @@ flowchart TD
 
 An **API (Application Programming Interface)** is the formal contract through which a software system exposes its capabilities, data, and behavior to consumers (internal modules, external clients, or third-party platforms).
 
-For dedicated foundational reading, see [API Fundamentals](api-fundamentals.md).
+For dedicated foundational reading, see [API Fundamentals](fundamentals.md).
 
 ### Why APIs Matter
 - **Modularity & Decoupling**: Enable systems to evolve their internal persistence and logic without breaking external consumers.
@@ -121,7 +121,7 @@ Regardless of protocol or style, well-designed APIs adhere to several core princ
 
 ## API Paradigms and Selection Guide
 
-For a detailed comparative breakdown, see [API Paradigms](api-paradigms.md) and [Architecture Overview](architecture-overview.md).
+For a detailed comparative breakdown, see [API Paradigms](paradigms.md) and [Architecture Overview](../architecture/overview.md).
 
 ```mermaid
 flowchart LR
@@ -197,7 +197,7 @@ Categorize and return standard HTTP status codes:
   - `304 Not Modified`: Cached response is valid (used with `ETag` / `If-None-Match`).
 - **4xx Client Errors**:
   - `400 Bad Request`: Malformed syntax, invalid request format.
-  - `401 Unauthorized`: Authentication required or token invalid/missing (see [API Security](api-security.md)).
+  - `401 Unauthorized`: Authentication required or token invalid/missing (see [API Security](security.md)).
   - `403 Forbidden`: Authenticated, but lacks authorization to perform action.
   - `404 Not Found`: Target resource does not exist.
   - `409 Conflict`: Business state conflict (e.g., duplicate unique key).
@@ -287,7 +287,7 @@ Adopt **RFC 7807 (Problem Details for HTTP APIs)** for consistent, structured er
 
 For high-throughput, low-latency East-West microservice communication, RPC with Protocol Buffers provides strong typing and efficient binary payloads.
 
-See the practical implementation in the [`grpc`](../apps/grpc/) project.
+See the practical implementation in the [`grpc`](../../apps/grpc/) project.
 
 ```mermaid
 sequenceDiagram
@@ -348,7 +348,7 @@ sequenceDiagram
 
 Asynchronous APIs define the contract for events and commands published to message brokers (e.g., Kafka, RabbitMQ).
 
-For detailed event patterns, see [Event-Driven Architecture](event-driven-architecture.md).
+For detailed event patterns, see [Event-Driven Architecture](../architecture/event-driven-architecture.md).
 
 ```mermaid
 flowchart LR
@@ -391,7 +391,7 @@ flowchart LR
 
 GraphQL provides a typed query language enabling clients to request exact data graphs in a single network round-trip.
 
-See comparisons in [API Paradigms](api-paradigms.md).
+See comparisons in [API Paradigms](paradigms.md).
 
 ### Design Rules for GraphQL
 
@@ -422,13 +422,13 @@ See comparisons in [API Paradigms](api-paradigms.md).
 - Return clear, granular validation error lists matching RFC 7807.
 
 ### 2. API Security Integration
-- For comprehensive security guidelines, refer to [API Security](api-security.md).
+- For comprehensive security guidelines, refer to [API Security](security.md).
 - **Authentication**: Bearer JWT tokens via OAuth2/OIDC.
 - **Authorization**: Role-Based (RBAC) and Attribute-Based (ABAC) checks applied at service use cases.
 - **Defense-in-depth**: Sanitize payloads, validate `Content-Type: application/json`, and configure CORS policies strictly.
 
 ### 3. API Documentation and Contracts
-- For documentation standards, refer to [API Documentation](api-documentation.md).
+- For documentation standards, refer to [API Documentation](documentation.md).
 - Generate live OpenAPI 3.0 / Swagger documentation (`/swagger-ui.html`).
 - Maintain Protobuf `.proto` and AsyncAPI files in version control as source-of-truth contracts.
 
@@ -448,19 +448,19 @@ See comparisons in [API Paradigms](api-paradigms.md).
 
 This repository provides hands-on code demonstrating API design patterns:
 
-### 1. RESTful Spring Boot Service ([`rest-spring`](../apps/rest-spring/))
+### 1. RESTful Spring Boot Service ([`rest-spring`](../../apps/rest-spring/))
 - **Controllers & Routing**: Resource endpoints demonstrating standard CRUD operations and HTTP status codes.
 - **Validation**: Jakarta Bean Validation on request DTOs.
 - **Data Persistence**: Spring JDBC repository pattern with automated Flyway database schema migrations.
 - **Containerization**: Backing services managed via `docker-compose.yml`.
 
-### 2. gRPC RPC Service ([`grpc`](../apps/grpc/))
+### 2. gRPC RPC Service ([`grpc`](../../apps/grpc/))
 - **IDL Contract**: Schema-first definition in `hello.proto`.
 - **Code Generation**: Automated generation of client stubs and server bases via protobuf Gradle plugins.
 - **Testing**: In-process gRPC testing verifying RPC contracts without physical port binding.
 
 ### 3. Architecture Roadmap
-- See [Repository Learning Map](repo-learning-map.md) for future exercises including OpenAPI integration, gRPC contract evolution, and event-driven Outbox implementations.
+- See [Repository Learning Map](../learning/repository-learning-map.md) for future exercises including OpenAPI integration, gRPC contract evolution, and event-driven Outbox implementations.
 
 [Back to top](#top)
 
