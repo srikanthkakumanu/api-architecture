@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: spring-boot-ddd-patterns
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:ms_patterns;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+patterns:
+  outbox:
+    backlog-threshold: 25
