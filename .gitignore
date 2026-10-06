@@ -1,20 +1,5 @@
-
+# Legacy local project
 graphql-dgs
-.vscode
-.gradle
-.idea
-
-bin
-build
-**/gradle/*
-!**/gradle/wrapper/
-!**/gradle/wrapper/gradle-wrapper.jar
-!**/gradle/wrapper/gradle-wrapper.properties
-!**/gradle/libs.versions.toml
-
-.classpath
-.project
-.settings
 
 # macOS
 .DS_Store
@@ -22,6 +7,10 @@ build
 .LSOverride
 
 # Java / Gradle
+.gradle/
+.kotlin/
+bin/
+build/
 out/
 target/
 *.class
@@ -34,11 +23,18 @@ replay_pid*
 
 # Spring Boot / local runtime
 *.pid
+*.pid.lock
 *.hprof
+*.jfr
+*.mv.db
+*.trace.db
 
 # Node / Next.js
 node_modules/
 .next/
+.turbo/
+.vercel/
+dist/
 next-env.d.ts
 *.tsbuildinfo
 npm-debug.log*
@@ -51,14 +47,29 @@ coverage/
 .nyc_output/
 test-results/
 playwright-report/
+blob-report/
 
 # Environment and secrets
 .env
 .env.*
 !.env.example
 !.env.sample
+!.env.template
+!.env.*.example
+!.env.*.sample
+!.env.*.template
+*.jks
+*.keystore
+*.p12
+*.pfx
 
 # IDEs and editors
+.idea/
+.vscode/
+.classpath
+.project
+.settings/
+.factorypath
 *.iml
 *.swp
 *.swo
